@@ -42,6 +42,7 @@ public class Catch {
       
     /*
      * Prosty przyklad bazy SQL
+       * Komentarz specjalnie dla Kamilka D
      */
       
     String sDriverName = "org.sqlite.JDBC";

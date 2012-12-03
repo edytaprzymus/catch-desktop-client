@@ -440,7 +440,7 @@ public class catchConnector {
         }
     }
     
-    
+    //komentarz dodany celem sprawdzenia synchronizacji przez Kamila.
     public static void main(String[] args) throws ClientProtocolException, IOException, ParseException{
         
         catchConnector connector = new catchConnector("nastasja", "filipovna");

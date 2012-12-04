@@ -180,5 +180,6 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
+
     private int returnStatus = RET_CANCEL;
 }

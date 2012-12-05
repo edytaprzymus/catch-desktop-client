@@ -7,6 +7,7 @@ package pkgcatch.connector;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ public final class catchStream {
     private String id;
     private String server_created_at;
     private String server_modified_at;
+    private HashMap contributors =  new HashMap();
     
     private static final String TAG_COUNT = "count";
     private static final String TAG_RESULT = "result";
@@ -52,7 +54,7 @@ public final class catchStream {
     private static final String TAG_OBJECTS = "objects";
     private static final String TAG_SERVER_DELETED_AT = "server_deleted_at";
     private static final String TAG_SERVER_CREATED_AT = "server_created_at";
-    
+    private static final String TAG_CONTRIBUTORS = "contributors";
     
     
     //dodac konstruktor i funkcje "update afer get on this id"
@@ -100,6 +102,12 @@ public final class catchStream {
     public String getServer_created_at() {
         return server_created_at;
     }
+
+    public HashMap getContributors() {
+        return contributors;
+    }
+    
+    
     
     catchStream (HttpResponse response) throws IOException, ParseException{
         
@@ -163,6 +171,29 @@ public final class catchStream {
         
    
         
+    }
+    
+    public void setContributorsMap(HttpResponse response) throws IOException, ParseException{
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        String line;
+        String str = "";
+        while ((line = rd.readLine()) != null) {
+            str += line;
+        }
+        String replaceAll = str.replaceAll("\\s","");
+        JSONParser parser=new JSONParser();
+        Object obj=parser.parse(str);
+        JSONObject jsonObject = (JSONObject) obj;
+        Object result = jsonObject.get(TAG_RESULT);
+        JSONObject jsonResult = (JSONObject) result;
+        Object contribs = jsonResult.get(TAG_CONTRIBUTORS);
+        JSONArray jsonContributors = (JSONArray) contribs;
+        for (int i = 0; i < jsonContributors.size(); ++i) {
+            JSONObject rec = (JSONObject) jsonContributors.get(i);
+            String uname = (String) rec.get("user_name");
+            String uid = (String) rec.get("id");
+            Object put = contributors.put(uid, uname);
+        }
     }
     
 }

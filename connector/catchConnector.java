@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
@@ -448,6 +449,11 @@ public class catchConnector {
         HttpResponse response = connector.getStreams();
         List<miniStream> streamList = new miniStreamList(response).getStreams();
         System.out.print(streamList.size());
+        HttpResponse resp2 = connector.getStream(streamList.get(1).getId());
+        catchStream stream = new catchStream(resp2);
+        stream.setContributorsMap(connector.getStreamContributors(streamList.get(1).getId()));
+        HashMap contributors = stream.getContributors();
+        
         
         
 

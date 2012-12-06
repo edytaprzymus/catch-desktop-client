@@ -5,25 +5,17 @@
 package pkgcatch.connector;
 import pkgcatch.connector.miniStreamList;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInput;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.ImageInputStreamImpl;
-import javax.management.monitor.Monitor;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -349,6 +341,19 @@ public class catchConnector {
         
     }
     
+    public HttpResponse deleteStream(String streamId, String serverModifiedAt) throws UnsupportedEncodingException, IOException{  
+        
+        HttpDeleteWithBody delete = new HttpDeleteWithBody(getStreamUrl(streamId) );
+        delete.setHeader("Authorization", "Basic " + encodedLoginData);
+        List nameValuePairs = new ArrayList(1);
+        nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
+        delete.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        HttpResponse response = httpClient.execute(delete);
+        return response;
+        
+    }
+    
+    
     public HttpResponse deleteObjectFromWorkspace(String objectId, String serverModifiedAt) throws UnsupportedEncodingException, IOException{  
         
         HttpDeleteWithBody delete = new HttpDeleteWithBody(getObjectUrlInSync(objectId));
@@ -388,7 +393,7 @@ public class catchConnector {
         
     }
     
-    public HttpResponse deleteStreamContributors(String streamId, String contributorId) throws IOException{
+    public HttpResponse deleteStreamContributor(String streamId, String contributorId) throws IOException{
         
         HttpDelete delete = new HttpDelete(getContributorUrl(streamId, contributorId));
         delete.setHeader("Authorization", "Basic " + encodedLoginData);
@@ -448,11 +453,19 @@ public class catchConnector {
         catchConnector connector = new catchConnector("nastasja", "filipovna");
         HttpResponse response = connector.getStreams();
         List<miniStream> streamList = new miniStreamList(response).getStreams();
-        System.out.print(streamList.size());
         HttpResponse resp2 = connector.getStream(streamList.get(1).getId());
         catchStream stream = new catchStream(resp2);
         stream.setContributorsMap(connector.getStreamContributors(streamList.get(1).getId()));
         HashMap contributors = stream.getContributors();
+        
+        HttpGet get = new HttpGet("https://api.catch.com/v3/streams/50a8af4c0731a317cfb0584c/50a8b05c70c8021a5b9815db");
+        get.setHeader("Authorization", "Basic " + connector.encodedLoginData);
+        HttpResponse response2 = httpClient.execute(get);
+        
+        catchObject obj = new catchObject((response2));
+        List tags = obj.getTags();
+        System.out.println(tags.size());
+        connector.deleteStream("50a79c3c0731a3179a37e651", "1353161789519");
         
         
         

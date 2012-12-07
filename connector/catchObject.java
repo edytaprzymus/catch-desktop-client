@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package connector;
+package pkgcatch.connector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,9 +21,8 @@ import org.json.simple.parser.ParseException;
  *
  * @author edytka
  */
-
 public final class catchObject {
-    
+
     private HttpResponse initialResponse;
     private Long n_streams;
     private List<String> tags = new ArrayList<>();
@@ -45,7 +44,6 @@ public final class catchObject {
     private String filename;
     private String content_type;
     private long count;
-    
     private static final String TAG_COUNT = "count";
     private static final String TAG_RESULT = "result";
     private static final String TAG_ID = "id";
@@ -78,6 +76,7 @@ public final class catchObject {
     public long getCount() {
         return count;
     }
+
     public int getSize() {
         return size;
     }
@@ -89,7 +88,6 @@ public final class catchObject {
     public String getContent_type() {
         return content_type;
     }
-    
 
     public HttpResponse getInitialResponse() {
         return initialResponse;
@@ -159,14 +157,13 @@ public final class catchObject {
         return children;
     }
 
-    public catchObject (HttpResponse response) throws IOException, ParseException{
+    public catchObject(HttpResponse response) throws IOException, ParseException {
         initialResponse = response;
         setConfiguration();
-    
+
     }
-    
-    public catchObject(){
-        
+
+    public catchObject() {
     }
 
     public catchObject(Long n_streams, String text, String created_at, String modified_at, boolean legacy_v2_share, String server_modified_at, String type, String server_deleted_at, String id, boolean checked, String child_of, int size, String filename, String content_type, long count) {
@@ -187,31 +184,30 @@ public final class catchObject {
         this.count = count;
     }
 
-    
-    public void setConfiguration() throws IOException, ParseException{
+    public void setConfiguration() throws IOException, ParseException {
         BufferedReader rd = new BufferedReader(new InputStreamReader(initialResponse.getEntity().getContent()));
         String line;
         String str = "";
         while ((line = rd.readLine()) != null) {
             str += line;
         }
-        String replaceAll = str.replaceAll("\\s","");
-        JSONParser parser=new JSONParser();
-        Object obj=parser.parse(str);
+        String replaceAll = str.replaceAll("\\s", "");
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(str);
         JSONObject jsonObject = (JSONObject) obj;
         Object result = jsonObject.get(TAG_RESULT);
         JSONObject jsonResult = (JSONObject) result;
-        
-        if(jsonResult.get(TAG_N_STREAMS)!=null) {
+
+        if (jsonResult.get(TAG_N_STREAMS) != null) {
             n_streams = (Long) jsonResult.get(TAG_N_STREAMS);
         }
-        if(jsonResult.get(TAG_TYPE) != null){
+        if (jsonResult.get(TAG_TYPE) != null) {
             type = (String) jsonResult.get(TAG_TYPE);
         }
-        if("checkitem".equals(type)){
-            checked =  false;
+        if ("checkitem".equals(type)) {
+            checked = false;
         }
-        
+
         text = (String) jsonResult.get(TAG_TEXT);
         count = (long) jsonResult.get(TAG_COUNT);
         created_at = (String) jsonResult.get(TAG_CREATED_AT);
@@ -220,103 +216,99 @@ public final class catchObject {
         modified_at = (String) jsonResult.get(TAG_MODIFIED_AT);
         server_deleted_at = (String) jsonResult.get(TAG_SERVER_DELETED_AT);
         server_modified_at = (String) jsonResult.get(TAG_SERVER_MODIFIED_AT);
-        
+
         JSONArray streamsJson = (JSONArray) jsonResult.get(TAG_STREAMS);
-        String[] streamsString = streamsJson.toString().substring(1,streamsJson.toString().length()-1).replaceAll("\"","").split(",");
+        String[] streamsString = streamsJson.toString().substring(1, streamsJson.toString().length() - 1).replaceAll("\"", "").split(",");
         streams.addAll(Arrays.asList(streamsString));
-        
+
         JSONArray tagsJson = (JSONArray) jsonResult.get(TAG_TAGS);
-        String[] tagsString = tagsJson.toString().substring(1,tagsJson.toString().length()-1).replaceAll("\"","").split(",");
+        String[] tagsString = tagsJson.toString().substring(1, tagsJson.toString().length() - 1).replaceAll("\"", "").split(",");
         tags.addAll(Arrays.asList(tagsString));
-        
-        if(((JSONArray) jsonResult.get(TAG_CHILDREN)) != null){
+
+        if (((JSONArray) jsonResult.get(TAG_CHILDREN)) != null) {
             JSONArray childrenJson = (JSONArray) jsonResult.get(TAG_CHILDREN);
-            String[] childrenString = childrenJson.toString().substring(1,childrenJson.toString().length()-1).replaceAll("\"","").split(",");
+            String[] childrenString = childrenJson.toString().substring(1, childrenJson.toString().length() - 1).replaceAll("\"", "").split(",");
             children.addAll(Arrays.asList(childrenString));
         }
-        
+
         Object result2 = jsonResult.get(TAG_USER);
-        JSONObject jsonResult2 = (JSONObject) result2;        
+        JSONObject jsonResult2 = (JSONObject) result2;
         user.put(TAG_USER_NAME, jsonResult2.get(TAG_USER_NAME));
         user.put(TAG_ID, jsonResult2.get(TAG_ID));
-        
+
         Object result3 = jsonResult.get(TAG_ANNOTATIONS);
-        if (result3 != null){
-            JSONObject jsonResult3 = (JSONObject) result3;        
-            if(jsonResult3.get(TAG_CATCH_STARRED) != null){
+        if (result3 != null) {
+            JSONObject jsonResult3 = (JSONObject) result3;
+            if (jsonResult3.get(TAG_CATCH_STARRED) != null) {
                 annotations.put(TAG_CATCH_STARRED, jsonResult3.get(TAG_CATCH_STARRED));
             }
-            
+
         }
 
-        if(jsonResult.get(TAG_CHILD_OF) != null){
+        if (jsonResult.get(TAG_CHILD_OF) != null) {
             child_of = (String) jsonResult.get(TAG_CHILD_OF);
         }
-        
-        if(jsonResult.get(TAG_FILENAME) != null){
+
+        if (jsonResult.get(TAG_FILENAME) != null) {
             filename = (String) jsonResult.get(TAG_FILENAME);
         }
-        
-        if(jsonResult.get(TAG_CONTENT_TYPE) != null){
+
+        if (jsonResult.get(TAG_CONTENT_TYPE) != null) {
             content_type = (String) jsonResult.get(TAG_CONTENT_TYPE);
         }
-        
-        if(jsonResult.get(TAG_SIZE) != null){
+
+        if (jsonResult.get(TAG_SIZE) != null) {
             size = (int) jsonResult.get(TAG_SIZE);
         }
     }
-    
-    public void updateAfterEditing(HttpResponse response) throws IOException, ParseException{
-        
+
+    public void updateAfterEditing(HttpResponse response) throws IOException, ParseException {
+
         BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         String line;
         String str = "";
         while ((line = rd.readLine()) != null) {
             str += line;
         }
-        String replaceAll = str.replaceAll("\\s","");
-        JSONParser parser=new JSONParser();
-        Object obj=parser.parse(str);
+        String replaceAll = str.replaceAll("\\s", "");
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(str);
         JSONObject jsonObject = (JSONObject) obj;
         Object result = jsonObject.get(TAG_RESULT);
         JSONObject jsonResult = (JSONObject) result;
         server_modified_at = (String) jsonResult.get(TAG_SERVER_MODIFIED_AT);
         type = (String) jsonResult.get(TAG_TYPE);
         id = (String) jsonResult.get(TAG_ID);
-    
+
     }
-    
-    public void checkCheckitem(){
+
+    public void checkCheckitem() {
         checked = true;
     }
-    
-    public void uncheckCheckitem(){
+
+    public void uncheckCheckitem() {
         checked = false;
     }
-    
-    public void updateAfterGet(HttpResponse response) throws IOException, ParseException{
-        
+
+    public void updateAfterGet(HttpResponse response) throws IOException, ParseException {
+
         initialResponse = response;
         setConfiguration();
-        
+
     }
-    
-    public List<String> extractTagsFromText(){
-        
+
+    public List<String> extractTagsFromText() {
+
         List<String> foundedTags = new ArrayList<>();
         String[] parts = text.split("#");
-        for(int i = 1; i < parts.length; i++){
+        for (int i = 1; i < parts.length; i++) {
             String[] parts2 = parts[i].split(" ");
-            if ( !foundedTags.contains(parts2[0]) )
+            if (!foundedTags.contains(parts2[0])) {
                 foundedTags.add(parts2[0]);
+            }
         }
-        
+
         return foundedTags;
-        
+
     }
-    
-    
-    
-    
-    
 }

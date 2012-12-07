@@ -201,9 +201,13 @@ public final class catchObject {
         JSONObject jsonObject = (JSONObject) obj;
         Object result = jsonObject.get(TAG_RESULT);
         JSONObject jsonResult = (JSONObject) result;
-        n_streams = (Long) jsonResult.get(TAG_N_STREAMS);
-        type = (String) jsonResult.get(TAG_TYPE);
         
+        if(jsonResult.get(TAG_N_STREAMS)!=null) {
+            n_streams = (Long) jsonResult.get(TAG_N_STREAMS);
+        }
+        if(jsonResult.get(TAG_TYPE) != null){
+            type = (String) jsonResult.get(TAG_TYPE);
+        }
         if("checkitem".equals(type)){
             checked =  false;
         }

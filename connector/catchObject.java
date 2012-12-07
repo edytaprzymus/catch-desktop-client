@@ -198,7 +198,7 @@ public final class catchObject {
         if(((JSONArray) jsonResult.get(TAG_CHILDREN)) != null){
             JSONArray childrenJson = (JSONArray) jsonResult.get(TAG_CHILDREN);
             String[] childrenString = childrenJson.toString().substring(1,childrenJson.toString().length()-1).replaceAll("\"","").split(",");
-            tags.addAll(Arrays.asList(childrenString));
+            children.addAll(Arrays.asList(childrenString));
         }
         
         Object result2 = jsonResult.get(TAG_USER);
@@ -264,6 +264,20 @@ public final class catchObject {
         
         initialResponse = response;
         setConfiguration();
+        
+    }
+    
+    public List<String> extractTagsFromText(){
+        
+        List<String> foundedTags = new ArrayList<>();
+        String[] parts = text.split("#");
+        for(int i = 1; i < parts.length; i++){
+            String[] parts2 = parts[i].split(" ");
+            if ( !foundedTags.contains(parts2[0]) )
+                foundedTags.add(parts2[0]);
+        }
+        
+        return foundedTags;
         
     }
     

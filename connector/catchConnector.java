@@ -464,11 +464,7 @@ public class catchConnector {
         
         catchObject obj = new catchObject((response2));
         List tags = obj.getTags();
-        System.out.println(tags.size());
-        connector.deleteStream("50a79c3c0731a3179a37e651", "1353161789519");
-        
-        
-        
+        System.out.println(tags.size());  
 
         }
     }

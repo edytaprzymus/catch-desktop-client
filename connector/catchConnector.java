@@ -2,8 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
-import pkgcatch.connector.miniStreamList;
+package connector;
+import connector.miniStreamList;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.BufferedReader;
@@ -153,6 +153,15 @@ public class catchConnector {
     public HttpResponse getStream(String streamId) throws UnsupportedEncodingException, IOException{  
         
         HttpGet get = new HttpGet(getStreamUrl(streamId));
+        get.setHeader("Authorization", "Basic " + encodedLoginData);
+        HttpResponse response = httpClient.execute(get);
+        return response;
+        
+    }
+    
+    public HttpResponse getObjectsInStream(String streamId, String objectId) throws UnsupportedEncodingException, IOException{  
+        
+        HttpGet get = new HttpGet(getObjectUrlInStream(streamId, objectId));
         get.setHeader("Authorization", "Basic " + encodedLoginData);
         HttpResponse response = httpClient.execute(get);
         return response;
@@ -444,16 +453,67 @@ public class catchConnector {
     
     //komentarz dodany celem sprawdzenia synchronizacji przez Kamila.
     public static void main(String[] args) throws ClientProtocolException, IOException, ParseException{
-        
-        catchConnector connector = new catchConnector("nastasja", "filipovna");
+         catchConnector connector = new catchConnector("kamildzi", "soos07");
         HttpResponse response = connector.getStreams();
-        List<miniStream> streamList = new miniStreamList(response).getStreams();
-        System.out.print(streamList.size());
-        HttpResponse resp2 = connector.getStream(streamList.get(1).getId());
-        catchStream stream = new catchStream(resp2);
-        stream.setContributorsMap(connector.getStreamContributors(streamList.get(1).getId()));
-        HashMap contributors = stream.getContributors();
+
+     
+       // catchStream bigStream = new catchStream(response);
         
+       // System.out.println("" + bigStream.getModified_at() + " " + bigStream.getName() + " " + bigStream.getSource());
+        
+         List<miniStream> streamList = new miniStreamList(response).getStreams();
+         
+       //  HttpResponse response1 = connector.getStream(streamList.get(1).getId());
+         
+    //     catchStream stream = new catchStream(response1);
+        
+         
+         
+         StreamController streamController = new StreamController(streamList.get(0));
+       //  StreamController streamController = new StreamController(streamList.get(0));
+         
+         streamController.addStreamToDataBase();
+         streamController.addContributorsToDatabase();
+         streamController.addUsersToDatabase();
+         //String objectId = streamController.getCatchStream().getObjects().get(0).getId();
+        
+        System.out.println(streamList.size());
+        System.out.println("" + streamList.get(0).getId() + " " + streamList.get(0).getName() + " " + streamList.get(0).getServer_created_at() );
+        ObjectController objectController = new ObjectController(streamController.getCatchStream());
+        objectController.addObjectToDataBase();
+        objectController.addObjectsInStreamsToDatabase();
+        objectController.addTagsToDatabase();
+        ObjectFromLocal objectFromLocal = new ObjectFromLocal();
+        //objectFromLocal.deleteObject(objectController.getCatchObjectsList().get(5).getId());
+        objectFromLocal.getObjects();
+        objectFromLocal.updateObject(objectController.getCatchObjectsList().get(0));
+       catchObject c =  objectFromLocal.getObject(objectController.getCatchObjectsList().get(0).getId());
+       
+       
+       StreamFromLocal s = new StreamFromLocal();
+      // s.deleteStream(streamList.get(0).getId());
+      //System.out.println(" wybrany stream to "+ s.getStreams().get(0).getId() + " a jego kolor " + s.getStreams().get(0).getAnnotations().get("user_color"));
+         s.updateStream(streamController.getCatchStream());
+        catchStream streamcatch = s.getStream(streamController.getCatchStream().getId());
+        
+      //  System.out.println("scaigneity stream to   "+ streamcatch.getId() + " i jeszcze " + streamcatch.getName());
+      //  StreamController streamController2 = new StreamController(streamList.get(1));
+       // streamController2.addStreamToDataBase();
+       //  streamController2.addContributorsToDatabase();
+         
+        //  ObjectController objectController2 = new ObjectController(streamController2.getCatchStream());
+       // objectController2.addObjectToDataBase();
+        
+        
+        //  catchConnector connector = new catchConnector("nastasja", "filipovna");
+      //  HttpResponse response = connector.getStreams();
+//        List<miniStream> streamList = new miniStreamList(response).getStreams();
+//        System.out.print(streamList.size());
+//        HttpResponse resp2 = connector.getStream(streamList.get(1).getId());
+//        catchStream stream = new catchStream(resp2);
+//        stream.setContributorsMap(connector.getStreamContributors(streamList.get(1).getId()));
+//        HashMap contributors = stream.getContributors();
+//        
         
         
 

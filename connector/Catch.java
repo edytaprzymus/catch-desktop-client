@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
+package connector;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -54,7 +54,7 @@ public class Catch {
     try
     {
       // create a database connection
-      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+      connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);  // set timeout to 30 sec.
       
@@ -97,7 +97,7 @@ public class Catch {
     
     HttpClient client = new DefaultHttpClient();
     HttpGet request = new HttpGet("https://api.catch.com/v3/streams/508eb9df0731a35ac5b91a27");
-    request.setHeader("Authorization", "Basic bmFzdGFzamE6ZmlsaXBvdm5h");
+    request.setHeader("Authorization", "Basic a2FtaWxkemk6c29vczA3");
     HttpResponse response = client.execute(request);
     BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
     String line = "";
@@ -110,7 +110,7 @@ public class Catch {
      * UWAGA! Zmiencie w tej linijce setHeader 
      * bmFzdGFzamE6ZmlsaXBvdm5h na Wasze zaszywrowane login:haslo
      */
-    post.setHeader("Authorization", "Basic bmFzdGFzamE6ZmlsaXBvdm5h");
+    post.setHeader("Authorization", "Basic a2FtaWxkemk6c29vczA3");
     List nameValuePairs = new ArrayList(1);
     nameValuePairs.add(new BasicNameValuePair("name", "fromNetbeans")); //you can as many name value pair as you want in the list.
     post.setEntity(new UrlEncodedFormEntity(nameValuePairs));

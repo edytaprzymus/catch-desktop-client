@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
+package connector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,6 +44,7 @@ public final class catchObject {
     private int size;
     private String filename;
     private String content_type;
+    private long count;
     
     private static final String TAG_COUNT = "count";
     private static final String TAG_RESULT = "result";
@@ -72,7 +73,11 @@ public final class catchObject {
     private static final String TAG_USER_NAME = "user_name";
     private static final String TAG_CONTENT_TYPE = "content_type";
     private static final String TAG_FILENAME = "filename";
+    private static final String TAG_TEXT = "text";
 
+    public long getCount() {
+        return count;
+    }
     public int getSize() {
         return size;
     }
@@ -160,6 +165,29 @@ public final class catchObject {
     
     }
     
+    public catchObject(){
+        
+    }
+
+    public catchObject(Long n_streams, String text, String created_at, String modified_at, boolean legacy_v2_share, String server_modified_at, String type, String server_deleted_at, String id, boolean checked, String child_of, int size, String filename, String content_type, long count) {
+        this.n_streams = n_streams;
+        this.text = text;
+        this.created_at = created_at;
+        this.modified_at = modified_at;
+        this.legacy_v2_share = legacy_v2_share;
+        this.server_modified_at = server_modified_at;
+        this.type = type;
+        this.server_deleted_at = server_deleted_at;
+        this.id = id;
+        this.checked = checked;
+        this.child_of = child_of;
+        this.size = size;
+        this.filename = filename;
+        this.content_type = content_type;
+        this.count = count;
+    }
+
+    
     public void setConfiguration() throws IOException, ParseException{
         BufferedReader rd = new BufferedReader(new InputStreamReader(initialResponse.getEntity().getContent()));
         String line;
@@ -180,6 +208,8 @@ public final class catchObject {
             checked =  false;
         }
         
+        text = (String) jsonResult.get(TAG_TEXT);
+        count = (long) jsonResult.get(TAG_COUNT);
         created_at = (String) jsonResult.get(TAG_CREATED_AT);
         id = (String) jsonResult.get(TAG_ID);
         legacy_v2_share = (boolean) jsonResult.get(TAG_LEGACY_V2_SHARE);
@@ -198,7 +228,7 @@ public final class catchObject {
         if(((JSONArray) jsonResult.get(TAG_CHILDREN)) != null){
             JSONArray childrenJson = (JSONArray) jsonResult.get(TAG_CHILDREN);
             String[] childrenString = childrenJson.toString().substring(1,childrenJson.toString().length()-1).replaceAll("\"","").split(",");
-            tags.addAll(Arrays.asList(childrenString));
+            children.addAll(Arrays.asList(childrenString));
         }
         
         Object result2 = jsonResult.get(TAG_USER);

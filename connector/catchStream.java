@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
+package connector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +37,8 @@ public final class catchStream {
     private String server_created_at;
     private String server_modified_at;
     private HashMap contributors =  new HashMap();
+    private List<String> user_idList = new ArrayList<>();
+    private List<String> user_nameList = new ArrayList<>();
     
     private static final String TAG_COUNT = "count";
     private static final String TAG_RESULT = "result";
@@ -106,6 +108,17 @@ public final class catchStream {
         return contributors;
     }
     
+    public List<String> getUser_idList(){
+        return user_idList;
+    }
+    
+    public List<String> getUser_nameList() {
+        return user_nameList;
+    }
+    public String getServerModifiedAt() {
+        return server_modified_at;
+    }
+    
     
     
     catchStream (HttpResponse response) throws IOException, ParseException{
@@ -115,6 +128,25 @@ public final class catchStream {
 
         
     }
+    
+    public catchStream() {
+        
+    }
+
+    public catchStream(int count, int contributor_count, String name, String source, String created_at, String modified_at, String server_deleted_at, String id, String server_created_at, String server_modified_at) {
+        this.count = count;
+        this.contributor_count = contributor_count;
+        this.name = name;
+        this.source = source;
+        this.created_at = created_at;
+        this.modified_at = modified_at;
+        this.server_deleted_at = server_deleted_at;
+        this.id = id;
+        this.server_created_at = server_created_at;
+        this.server_modified_at = server_modified_at;
+    }
+    
+    
     
     public void SetConfiguration(boolean get) throws IOException, ParseException{
         BufferedReader rd = new BufferedReader(new InputStreamReader(initialResponse.getEntity().getContent()));
@@ -138,7 +170,7 @@ public final class catchStream {
         server_modified_at = (String) jsonResult.get(TAG_SERVER_MODIFIED_AT);
         server_created_at = (String) jsonResult.get(TAG_SERVER_CREATED_AT);
         
-        if (get){
+     //   if (get){
             
            Object jsonAnnotations = jsonResult.get(TAG_ANNOTATIONS);
            if (jsonAnnotations != null){
@@ -156,9 +188,10 @@ public final class catchStream {
            for(int i = 0; i< objectsJson.size(); i++){
                JSONObject objectJson = (JSONObject) objectsJson.get(i);
                miniObject mini = new miniObject((String) objectJson.get(TAG_ID), (String) objectJson.get(TAG_SERVER_MODIFIED_AT), (String) objectJson.get(TAG_TYPE));
+             //  System.out.println("dodalem obiekt mini o id" + mini.getId());
                objects.add(mini);
            }
-        }
+       // }
         
     }
     
@@ -187,10 +220,14 @@ public final class catchStream {
         JSONObject jsonResult = (JSONObject) result;
         Object contribs = jsonResult.get(TAG_CONTRIBUTORS);
         JSONArray jsonContributors = (JSONArray) contribs;
-        for (int i = 0; i < jsonContributors.size(); ++i) {
+        for (int i = 0; i < jsonContributors.size(); i++) {
             JSONObject rec = (JSONObject) jsonContributors.get(i);
             String uname = (String) rec.get("user_name");
+            System.out.println("uname "+uname + i);
             String uid = (String) rec.get("id");
+            user_idList.add(uid);
+            user_nameList.add(uname);
+            System.out.println("id usera w users todwed "+user_idList.get(i) + "a jego name todewdew " + user_nameList.get(i)+ "  "+ i);
             Object put = contributors.put(uid, uname);
         }
     }

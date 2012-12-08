@@ -440,7 +440,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void createAllStreamsPanel() {
        List<miniStream> allStreams = streamFromLocal.getStreams();
        for (miniStream mini : allStreams) {
-           StreamLinkPanel streamLink = new StreamLinkPanel(mini.getName());
+           StreamLinkPanel streamLink = new StreamLinkPanel(mini);
            allStreamsPanel.add(streamLink);
            streamLinks.add(streamLink);
        }       
@@ -522,5 +522,6 @@ public class MainFrame extends javax.swing.JFrame {
     private LinkedList<StreamLinkPanel> streamLinks = new LinkedList<>();
     private Controller controller;
     private StreamFromLocal streamFromLocal = new StreamFromLocal();
+    private miniStream currentStream;
 
 }

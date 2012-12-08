@@ -2,7 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
+package connector;
+import gui.Controller;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -43,7 +44,7 @@ public class Catch {
        * A tu komentarz dla Przemka
        * drugi komentarz dla Przemka
      */
-      
+    Controller guiController = new Controller();
     String sDriverName = "org.sqlite.JDBC";
     Class.forName(sDriverName);
     

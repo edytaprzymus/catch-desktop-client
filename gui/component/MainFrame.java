@@ -7,6 +7,7 @@ package gui.component;
 import connector.StreamFromLocal;
 import connector.miniStream;
 import gui.Controller;
+import java.awt.Component;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -426,7 +427,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_editStreamButtonMouseClicked
 
     private void synchronizeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_synchronizeButtonMouseClicked
-        // kod do synchronizacji
+       refreshAllStreamsPanel();
     }//GEN-LAST:event_synchronizeButtonMouseClicked
 
     private void createNotePanels() {
@@ -437,17 +438,26 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     private void createAllStreamsPanel() {
-       List<miniStream> allStreams = new StreamFromLocal().getStreams();
+       List<miniStream> allStreams = streamFromLocal.getStreams();
        for (miniStream mini : allStreams) {
            StreamLinkPanel streamLink = new StreamLinkPanel(mini.getName());
            allStreamsPanel.add(streamLink);
            streamLinks.add(streamLink);
-       }
+       }       
     }
-    
+  
     private void createAddStreamPanel() {
         AddStreamPanel addStreamPanel = new AddStreamPanel();
         createStreamPanel.add(addStreamPanel);
+    }
+    
+    private void refreshAllStreamsPanel() {
+       for (Component comp : allStreamsPanel.getComponents() ) {
+           allStreamsPanel.remove(comp);
+       }
+       createAllStreamsPanel();
+       allStreamsPanel.validate();
+       allStreamsPanel.update(allStreamsPanel.getGraphics());
     }
     
     /**
@@ -511,5 +521,6 @@ public class MainFrame extends javax.swing.JFrame {
     private LinkedList<String> streamList = new LinkedList<>();
     private LinkedList<StreamLinkPanel> streamLinks = new LinkedList<>();
     private Controller controller;
+    private StreamFromLocal streamFromLocal = new StreamFromLocal();
 
 }

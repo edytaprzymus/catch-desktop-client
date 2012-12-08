@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
+package connector;
 
 import connector.miniObject;
 import java.sql.Connection;

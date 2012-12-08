@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import pkgcatch.connector.catchStream;
+
 
 /**
  *
@@ -147,6 +147,22 @@ public class StreamFromLocal {
 
 
     }
+    
+    public List<catchObject> getObjectsFromSteam(String stream_id) {
+        
+        List<catchObject> objects = new ArrayList<catchObject>();
+        catchStream catchstream = this.getStream(stream_id);
+        List<miniObject> miniobjects = catchstream.getObjectsFromStreamId(stream_id);
+        
+        ObjectFromLocal o= new ObjectFromLocal();
+        
+        for(miniObject mini : miniobjects){
+            objects.add(o.getObject(mini.getId()));
+        }
+        
+        
+        return objects;
+    }
 
     public catchStream getStream(String stream_id) {
         String sDriverName = "org.sqlite.JDBC";
@@ -156,6 +172,7 @@ public class StreamFromLocal {
             System.err.println(e);
         }
         ResultSet rs = null;
+        ResultSet rs2 = null;
         Connection connection = null;
         catchStream catchstream1 = new catchStream();
         try {

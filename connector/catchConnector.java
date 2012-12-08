@@ -34,11 +34,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import pkgcatch.connector.ObjectController;
-import pkgcatch.connector.ObjectFromLocal;
-import pkgcatch.connector.StreamController;
-import pkgcatch.connector.catchObject;
-import pkgcatch.connector.catchStream;
+
 
 /**
  *
@@ -508,7 +504,10 @@ public class catchConnector {
         //System.out.println(" wybrany stream to "+ s.getStreams().get(0).getId() + " a jego kolor " + s.getStreams().get(0).getAnnotations().get("user_color"));
         s.updateStream(streamController.getCatchStream());
         catchStream streamcatch = s.getStream(streamController.getCatchStream().getId());
-
+        
+        System.out.println("id obiektow w streamie to hehe " + s.getObjectsFromSteam(streamcatch.getId()).get(0).getId() );
+        
+        
         //  System.out.println("scaigneity stream to   "+ streamcatch.getId() + " i jeszcze " + streamcatch.getName());
         //  StreamController streamController2 = new StreamController(streamList.get(1));
         // streamController2.addStreamToDataBase();

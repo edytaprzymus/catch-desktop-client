@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
+package connector;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -34,6 +34,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pkgcatch.connector.ObjectController;
+import pkgcatch.connector.ObjectFromLocal;
+import pkgcatch.connector.StreamController;
+import pkgcatch.connector.catchObject;
+import pkgcatch.connector.catchStream;
 
 /**
  *

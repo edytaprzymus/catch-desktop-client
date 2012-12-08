@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pkgcatch.connector;
+package connector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import pkgcatch.connector.catchStream;
 
 /**
  *

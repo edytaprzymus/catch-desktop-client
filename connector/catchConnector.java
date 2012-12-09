@@ -302,7 +302,7 @@ public class catchConnector {
         return response;
 
     }
-
+    
     public HttpResponse editComment(String commentId, String serverModifiedAt, String newText) throws UnsupportedEncodingException, IOException {
 
         HttpPut put = new HttpPut(getObjectUrlInSync(commentId));
@@ -311,6 +311,24 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
         nameValuePairs.add(new BasicNameValuePair("text", newText));
         nameValuePairs.add(new BasicNameValuePair("type", "comment"));
+        put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
+        HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
+        return response;
+
+    }
+
+    public HttpResponse editStream(String streamId, String serverModifiedAt, String name, String colorName) throws UnsupportedEncodingException, IOException {
+
+        HttpPut put = new HttpPut(getStreamUrl(streamId));
+        put.setHeader("Authorization", "Basic " + encodedLoginData);
+        List nameValuePairs = new ArrayList(3);
+        nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
+        nameValuePairs.add(new BasicNameValuePair("name", name));
+        if (!colorName.isEmpty()){
+            nameValuePairs.add(new BasicNameValuePair("user:color", colorName));
+        }
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
         EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
@@ -518,7 +536,7 @@ public class catchConnector {
 
         List<miniStream> streamList = new miniStreamList(response).getStreams();
         connector2.deleteStream(streamList.get(0).getId(), streamList.get(0).getServer_modified_at());
-        ///HttpResponse response4 = connector.getStreams();
+        HttpResponse response4 = connector.getStreams();
         
         HttpResponse response3 = connector3.getStream("50a54d980731a3178806a351");
         catchStream stream1 = new catchStream(response3);

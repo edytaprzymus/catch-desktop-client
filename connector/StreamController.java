@@ -34,7 +34,18 @@ public class StreamController {
         this.catchstream = getStreamFromMiniStream(ministream);
 
         this.ministream = ministream;
-        catchstream.setContributorsMap(connector.getStreamContributors(ministream.getId()));
+        if(!"default".equals(ministream.getId()))
+            catchstream.setContributorsMap(connector.getStreamContributors(ministream.getId()));
+        else
+            catchstream.setEmptyContributorsMap();
+
+    }
+    
+    public StreamController(catchStream catchstream, catchConnector connector) throws IOException, ParseException {
+        this.connector = connector;
+        this.catchstream = catchstream;
+
+        catchstream.setContributorsMap(connector.getStreamContributors(catchstream.getId()));
 
     }
 

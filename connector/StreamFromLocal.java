@@ -22,6 +22,11 @@ public class StreamFromLocal {
 
     public StreamFromLocal() {
     }
+    
+    public void updateStreamName(String newName, catchStream stream) {
+        stream.setName(newName);
+        this.updateStream(stream);
+    }
 
     public void deleteStream(String streamId) {
         String sDriverName = "org.sqlite.JDBC";

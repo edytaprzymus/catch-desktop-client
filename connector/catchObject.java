@@ -25,6 +25,78 @@ public final class catchObject {
 
     private HttpResponse initialResponse;
     private Long n_streams;
+
+    public void setN_streams(Long n_streams) {
+        this.n_streams = n_streams;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public void setModified_at(String modified_at) {
+        this.modified_at = modified_at;
+    }
+
+    public void setLegacy_v2_share(boolean legacy_v2_share) {
+        this.legacy_v2_share = legacy_v2_share;
+    }
+
+    public void setServer_modified_at(String server_modified_at) {
+        this.server_modified_at = server_modified_at;
+    }
+
+    public void setStreams(List<String> streams) {
+        this.streams = streams;
+    }
+
+    public void setUser(HashMap user) {
+        this.user = user;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setServer_deleted_at(String server_deleted_at) {
+        this.server_deleted_at = server_deleted_at;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public void setChild_of(String child_of) {
+        this.child_of = child_of;
+    }
+
+    public void setChildren(List<String> children) {
+        this.children = children;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public void setContent_type(String content_type) {
+        this.content_type = content_type;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
+    }
     private List<String> tags = new ArrayList<>();
     private String text;
     private String created_at;
@@ -166,7 +238,7 @@ public final class catchObject {
     public catchObject() {
     }
 
-    public catchObject(Long n_streams, String text, String created_at, String modified_at, boolean legacy_v2_share, String server_modified_at, String type, String server_deleted_at, String id, boolean checked, String child_of, int size, String filename, String content_type, long count) {
+    public catchObject(Long n_streams, String text, String created_at, String modified_at, boolean legacy_v2_share, String server_modified_at, String type, String server_deleted_at, String id, boolean checked, String child_of, int size, String filename, String content_type, long count, HashMap user) {
         this.n_streams = n_streams;
         this.text = text;
         this.created_at = created_at;
@@ -182,6 +254,8 @@ public final class catchObject {
         this.filename = filename;
         this.content_type = content_type;
         this.count = count;
+        this.user = user;
+        
     }
 
     public void setConfiguration() throws IOException, ParseException {

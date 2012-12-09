@@ -11,7 +11,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -20,6 +23,66 @@ import java.util.List;
 public class ObjectFromLocal {
 
     public ObjectFromLocal() {
+    }
+    
+    public void updateObjectText(String text, catchObject object) { //tutaj zmieniasz text dowolnego obiektu takze notakti komentarza itp itd
+        object.setText(text);
+        this.updateObject(object);
+    }
+    
+    public boolean isStarred(catchObject object) {
+        String starred = (String) object.getAnnotations().get("catch:starred");
+        if(starred.equals("true")){
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
+    
+    public void updateTask(String taskText, boolean checked, catchObject object) {
+        object.setText(taskText);
+        object.setChecked(checked);
+        this.updateObject(object);
+    }
+    
+    public catchObject createObject(String streamId) {
+        Random random = new Random();
+        String sDriverName = "org.sqlite.JDBC";
+        try {
+            Class.forName(sDriverName);
+        } catch (ClassNotFoundException e) {
+            System.err.println(e);
+        }
+
+        Connection connection = null;
+        catchObject catchobject1 = new catchObject();
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            int randomId = random.nextInt();
+            int randomPath = random.nextInt();
+                statement.executeUpdate("insert into OBJECTS values(" + "'" + randomId + "'" + ", " + 0 + ", " + 0 + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + new Date() + "'" + ", " + "'" + new Date() + "'" + ", " + "'" + "*" + "'" + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + "false" + "'" + ", " + "'" + "*" + "'" + ", " + 000000 + ", " + 0000001 + ", " + "'" + "*" + "'" + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + 0 + "'" + ", " + "'modifiedLocaly dodane recznie'" + ", " + "'deletedLocaly dodane recznie'" + ", " + "'isuptodate dodane recznie'" + ", " + "'filepath dodane recznie" + randomPath+ "'" + ")");
+                statement.executeUpdate("insert into OBJECT_IN_STREAM values(" + "'" + randomId + "'" + ", " + "'" + streamId + "'" + ")");
+               catchobject1 = this.getObject(Integer.toString(randomId));
+
+        } catch (SQLException e) {
+            // if the error message is "out of memory", 
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return catchobject1;
     }
 
     public void deleteObject(String objectId) {
@@ -149,7 +212,7 @@ public class ObjectFromLocal {
             rs = statement.executeQuery("select * from objects where object_id='" + object_id + "'");
             int i = 0;
             while (rs.next()) {
-                catchObject catchobject = new catchObject((long) rs.getLong("n_streams"), (String) rs.getString("text"), (String) rs.getString("created_at"), (String) rs.getString("modified_at"), (boolean) rs.getBoolean("legacy_v2_share"), (String) rs.getString("server_modified_at"), (String) rs.getString("type"), (String) rs.getString("server_deleted_at"), (String) rs.getString("object_id"), (boolean) rs.getBoolean("checked"), (String) rs.getString("child_of"), (int) rs.getInt("size"), (String) rs.getString("filename"), (String) rs.getString("content_type"), (long) rs.getLong("count"));
+                catchObject catchobject = new catchObject((long) rs.getLong("n_streams"), (String) rs.getString("text"), (String) rs.getString("created_at"), (String) rs.getString("modified_at"), (boolean) rs.getBoolean("legacy_v2_share"), (String) rs.getString("server_modified_at"), (String) rs.getString("type"), (String) rs.getString("server_deleted_at"), (String) rs.getString("object_id"), (boolean) rs.getBoolean("checked"), (String) rs.getString("child_of"), (int) rs.getInt("size"), (String) rs.getString("filename"), (String) rs.getString("content_type"), (long) rs.getLong("count"), getUserFromObjectId(object_id));
                 catchobject1 = catchobject;
             }
 
@@ -170,5 +233,45 @@ public class ObjectFromLocal {
 
 
         return catchobject1;
+    }
+    
+    private HashMap getUserFromObjectId (String id) {
+        HashMap user = new HashMap();
+         String sDriverName = "org.sqlite.JDBC";
+        try {
+            Class.forName(sDriverName);
+        } catch (ClassNotFoundException e) {
+            System.err.println(e);
+        }
+        ResultSet rs = null;
+        Connection connection = null;
+        
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            rs = statement.executeQuery("select user_id, user_name from USERS where user_id ='" + id + "'");
+            int i = 0;
+            while (rs.next()) {
+               user.put("user_name", rs.getString("user_name"));
+               user.put("id", rs.getString("user_id"));
+            }
+
+        } catch (SQLException e) {
+            // if the error message is "out of memory", 
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return user;
+        
     }
 }

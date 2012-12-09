@@ -8,6 +8,11 @@ import connector.miniObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +30,58 @@ public final class catchStream {
 
     private HttpResponse initialResponse;
     private int count;
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setContributor_count(int contributor_count) {
+        this.contributor_count = contributor_count;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public void setModified_at(String modified_at) {
+        this.modified_at = modified_at;
+    }
+
+    public void setObjects(List<miniObject> objects) {
+        this.objects = objects;
+    }
+
+    public void setServer_deleted_at(String server_deleted_at) {
+        this.server_deleted_at = server_deleted_at;
+    }
+
+    public void setServer_created_at(String server_created_at) {
+        this.server_created_at = server_created_at;
+    }
+
+    public void setServer_modified_at(String server_modified_at) {
+        this.server_modified_at = server_modified_at;
+    }
+
+    public void setContributors(HashMap contributors) {
+        this.contributors = contributors;
+    }
+
+    public void setUser_idList(List<String> user_idList) {
+        this.user_idList = user_idList;
+    }
+
+    public void setUser_nameList(List<String> user_nameList) {
+        this.user_nameList = user_nameList;
+    }
     private int contributor_count;
     private String name;
     private String source;
@@ -139,6 +196,51 @@ public final class catchStream {
         this.id = id;
         this.server_created_at = server_created_at;
         this.server_modified_at = server_modified_at;
+        this.objects = this.getObjectsFromStreamId(id);
+       
+    }
+    public List<miniObject> getObjectsFromStreamId(String streamId) {
+        
+        List<miniObject> objects = new ArrayList<miniObject>();
+         String sDriverName = "org.sqlite.JDBC";
+        try {
+            Class.forName(sDriverName);
+        } catch (ClassNotFoundException e) {
+            System.err.println(e);
+        }
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+
+            
+               rs = statement.executeQuery("select object_id from OBJECT_IN_STREAM where stream_id=('" + streamId +"')");
+               while (rs.next()) {
+                   rs2 = statement.executeQuery(" select  object_id, server_modified_at, type from OBJECTS where object_id =('" + rs.getString(1) +"')");
+                   while(rs2.next()) {
+                       objects.add(new miniObject(rs2.getString("object_id"), rs2.getString("server_modified_at"), rs2.getString("type") ));
+                   }
+               }
+                
+            
+        } catch (SQLException e) {
+            // if the error message is "out of memory", 
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return objects;
     }
 
     public void SetConfiguration(boolean get) throws IOException, ParseException {

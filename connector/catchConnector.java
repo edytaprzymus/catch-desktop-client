@@ -37,6 +37,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 /**
  *
  * @author edytka
@@ -320,7 +321,7 @@ public class catchConnector {
         return response;
 
     }
-
+    
     public HttpResponse editComment(String commentId, String serverModifiedAt, String newText) throws UnsupportedEncodingException, IOException {
 
         HttpPut put = new HttpPut(getObjectUrlInSync(commentId));
@@ -545,85 +546,8 @@ public class catchConnector {
         }
     }
 
-    //komentarz dodany celem sprawdzenia synchronizacji przez Kamila.
+    
     public static void main(String[] args) throws ClientProtocolException, IOException, ParseException {
-        catchConnector connector = new catchConnector("kamildzi", "soos07");
-        HttpResponse response = connector.getStreams();
-
-
-        // catchStream bigStream = new catchStream(response);
-
-        // System.out.println("" + bigStream.getModified_at() + " " + bigStream.getName() + " " + bigStream.getSource());
-
-        List<miniStream> streamList = new miniStreamList(response).getStreams();
-
-        //  HttpResponse response1 = connector.getStream(streamList.get(1).getId());
-
-        //     catchStream stream = new catchStream(response1);
-
-
-
-        StreamController streamController = new StreamController(streamList.get(0),connector);
-        //  StreamController streamController = new StreamController(streamList.get(0));
-
-        streamController.addStreamToDataBase();
-        streamController.addContributorsToDatabase();
-        streamController.addUsersToDatabase();
-        //String objectId = streamController.getCatchStream().getObjects().get(0).getId();
-
-        System.out.println(streamList.size());
-        System.out.println("" + streamList.get(0).getId() + " " + streamList.get(0).getName() + " " + streamList.get(0).getServer_created_at());
-        ObjectController objectController = new ObjectController(streamController.getCatchStream(),connector);
-        objectController.addObjectToDataBase();
-        objectController.addObjectsInStreamsToDatabase();
-        objectController.addTagsToDatabase();
-        ObjectFromLocal objectFromLocal = new ObjectFromLocal();
-        //objectFromLocal.deleteObject(objectController.getCatchObjectsList().get(5).getId());
-        objectFromLocal.getObjects();
-        objectFromLocal.updateObject(objectController.getCatchObjectsList().get(0));
-        catchObject c = objectFromLocal.getObject(objectController.getCatchObjectsList().get(0).getId());
-
-
-        StreamFromLocal s = new StreamFromLocal();
-        // s.deleteStream(streamList.get(0).getId());
-        //System.out.println(" wybrany stream to "+ s.getStreams().get(0).getId() + " a jego kolor " + s.getStreams().get(0).getAnnotations().get("user_color"));
-        s.updateStream(streamController.getCatchStream());
-        catchStream streamcatch = s.getStream(streamController.getCatchStream().getId());
-
-        //  System.out.println("scaigneity stream to   "+ streamcatch.getId() + " i jeszcze " + streamcatch.getName());
-        //  StreamController streamController2 = new StreamController(streamList.get(1));
-        // streamController2.addStreamToDataBase();
-        //  streamController2.addContributorsToDatabase();
-
-        //  ObjectController objectController2 = new ObjectController(streamController2.getCatchStream());
-        // objectController2.addObjectToDataBase();
-
-
-        //  catchConnector connector = new catchConnector("nastasja", "filipovna");
-        //  HttpResponse response = connector.getStreams();
-//        List<miniStream> streamList = new miniStreamList(response).getStreams();
-//        System.out.print(streamList.size());
-//        HttpResponse resp2 = connector.getStream(streamList.get(1).getId());
-//        catchStream stream = new catchStream(resp2);
-//        stream.setContributorsMap(connector.getStreamContributors(streamList.get(1).getId()));
-//        HashMap contributors = stream.getContributors();
-//        
-
-//        List<miniStream> streamList2 = new miniStreamList(response).getStreams();
-//        HttpResponse resp2 = connector.getStream(streamList2.get(1).getId());
-//        catchStream stream = new catchStream(resp2);
-//        stream.setContributorsMap(connector.getStreamContributors(streamList2.get(1).getId()));
-//        HashMap contributors = stream.getContributors();
-//        
-//        HttpGet get = new HttpGet("https://api.catch.com/v3/streams/50a8af4c0731a317cfb0584c/50a8b05c70c8021a5b9815db");
-//        get.setHeader("Authorization", "Basic " + connector.encodedLoginData);
-//        HttpResponse response2 = httpClient.execute(get);
-//        
-//        catchObject obj = new catchObject((response2));
-//        List tags = obj.getTags();
-//        System.out.println(tags.size());
-//        connector.deleteStream("50a79c3c0731a3179a37e651", "1353161789519");
-
-
+       
     }
 }

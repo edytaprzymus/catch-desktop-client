@@ -4,6 +4,8 @@
  */
 package gui.component;
 
+import connector.miniStream;
+
 /**
  *
  * @author Prezes
@@ -14,11 +16,16 @@ public class StreamLinkPanel extends javax.swing.JPanel {
      * Creates new form StreamLinkPanel
      */
     //StreamLinkPanel(CatchStream stream)
-    public StreamLinkPanel(String name) {
+    public StreamLinkPanel(miniStream stream) {
+        this.stream = stream;
         initComponents();
-        streamNameLabel.setText(name);
+        streamNameLabel.setText(stream.getName());
     }
    
+    
+    public miniStream getStream() {
+        return stream;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,4 +61,5 @@ public class StreamLinkPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel streamNameLabel;
     // End of variables declaration//GEN-END:variables
+    private miniStream stream;
 }

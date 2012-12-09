@@ -4,6 +4,7 @@
  */
 package connector;
 
+import connector.miniStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

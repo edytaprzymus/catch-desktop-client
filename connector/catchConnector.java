@@ -462,7 +462,7 @@ public class catchConnector {
 
     //komentarz dodany celem sprawdzenia synchronizacji przez Kamila.
     public static void main(String[] args) throws ClientProtocolException, IOException, ParseException {
-        catchConnector connector = new catchConnector("kamildzi", "soos07");
+        catchConnector connector = new catchConnector("nastasja", "filipovna");
         HttpResponse response = connector.getStreams();
 
 
@@ -471,41 +471,23 @@ public class catchConnector {
         // System.out.println("" + bigStream.getModified_at() + " " + bigStream.getName() + " " + bigStream.getSource());
 
         List<miniStream> streamList = new miniStreamList(response).getStreams();
-
-        //  HttpResponse response1 = connector.getStream(streamList.get(1).getId());
-
-        //     catchStream stream = new catchStream(response1);
-
-
-
-        StreamController streamController = new StreamController(streamList.get(0));
-        //  StreamController streamController = new StreamController(streamList.get(0));
-
-        streamController.addStreamToDataBase();
-        streamController.addContributorsToDatabase();
-        streamController.addUsersToDatabase();
-        //String objectId = streamController.getCatchStream().getObjects().get(0).getId();
-
-        System.out.println(streamList.size());
-        System.out.println("" + streamList.get(0).getId() + " " + streamList.get(0).getName() + " " + streamList.get(0).getServer_created_at());
-        ObjectController objectController = new ObjectController(streamController.getCatchStream());
-        objectController.addObjectToDataBase();
-        objectController.addObjectsInStreamsToDatabase();
-        objectController.addTagsToDatabase();
-        ObjectFromLocal objectFromLocal = new ObjectFromLocal();
-        //objectFromLocal.deleteObject(objectController.getCatchObjectsList().get(5).getId());
-        objectFromLocal.getObjects();
-        objectFromLocal.updateObject(objectController.getCatchObjectsList().get(0));
-        catchObject c = objectFromLocal.getObject(objectController.getCatchObjectsList().get(0).getId());
-
-
-        StreamFromLocal s = new StreamFromLocal();
-        // s.deleteStream(streamList.get(0).getId());
-        //System.out.println(" wybrany stream to "+ s.getStreams().get(0).getId() + " a jego kolor " + s.getStreams().get(0).getAnnotations().get("user_color"));
-        s.updateStream(streamController.getCatchStream());
-        catchStream streamcatch = s.getStream(streamController.getCatchStream().getId());
         
-        System.out.println("id obiektow w streamie to hehe " + s.getObjectsFromSteam(streamcatch.getId()).get(0).getId() );
+        HttpResponse response3 = connector.getStream("50a54d980731a3178806a351");
+        catchStream stream1 = new catchStream(response3);
+        HttpResponse response1 = connector.getObjectsInStream("50a54d980731a3178806a351", "50b0b79c0731a37825ca8d82");
+        catchObject note1 = new catchObject(response1);
+        String text = note1.getText();
+        System.out.print(text+ "\n\n");
+        for (int i = 0; i < text.length(); i++){
+            char c = text.charAt(i);  
+            if ((int) c < 32){
+                System.out.print(c + "\n");
+                System.out.print((int) c + "\n");
+            }
+        }
+        ObjectController objectController2 = new ObjectController(stream1);
+        objectController2.addObjectToDataBase();
+
         
         
         //  System.out.println("scaigneity stream to   "+ streamcatch.getId() + " i jeszcze " + streamcatch.getName());

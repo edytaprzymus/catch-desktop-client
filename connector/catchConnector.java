@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -31,6 +32,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -69,7 +71,8 @@ public class catchConnector {
 
     private String encodedLoginData;
     private static String basicUrl = "https://api.catch.com/v3/";
-    private static HttpClient httpClient = new DefaultHttpClient();
+    private HttpClient httpClient = new DefaultHttpClient();
+    private static HttpEntity entity  = null;
 
     public catchConnector(String login, String password) {
 
@@ -133,7 +136,9 @@ public class catchConnector {
         List nameValuePairs = new ArrayList(1);
         nameValuePairs.add(new BasicNameValuePair("name", streamName));
         post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(post);
+        entity = response.getEntity();
         return response;
 
     }
@@ -142,7 +147,9 @@ public class catchConnector {
 
         HttpGet get = new HttpGet(getStreamsUrl());
         get.setHeader("Authorization", "Basic " + encodedLoginData);
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(get);
+        entity = response.getEntity();
         return response;
 
     }
@@ -151,7 +158,9 @@ public class catchConnector {
 
         HttpGet get = new HttpGet(getStreamUrl(streamId));
         get.setHeader("Authorization", "Basic " + encodedLoginData);
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(get);
+        entity = response.getEntity();
         return response;
 
     }
@@ -160,7 +169,9 @@ public class catchConnector {
 
         HttpGet get = new HttpGet(getObjectUrlInStream(streamId, objectId));
         get.setHeader("Authorization", "Basic " + encodedLoginData);
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(get);
+        entity = response.getEntity();
         return response;
 
     }
@@ -174,7 +185,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("email", email));
         nameValuePairs.add(new BasicNameValuePair("stream", streamId));
         post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(post);
+        entity = response.getEntity();
         return response;
 
     }
@@ -183,7 +196,9 @@ public class catchConnector {
 
         HttpGet get = new HttpGet(getStreamUrl(streamId));
         get.setHeader("Authorization", "Basic " + encodedLoginData);
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(get);
+        entity = response.getEntity();
         return response;
 
     }
@@ -201,7 +216,9 @@ public class catchConnector {
             nameValuePairs.add(new BasicNameValuePair("tags", tags[i]));
         }
         post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(post);
+        entity = response.getEntity();
         return response;
 
     }
@@ -215,7 +232,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("text", commentText));
         nameValuePairs.add(new BasicNameValuePair("type", "comment"));
         post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(post);
+        entity = response.getEntity();
         return response;
 
     }
@@ -229,7 +248,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("text", checkitemText));
         nameValuePairs.add(new BasicNameValuePair("type", "checkitem"));
         post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(post);
+        entity = response.getEntity();
         return response;
 
     }
@@ -243,7 +264,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("checked", "true"));
         nameValuePairs.add(new BasicNameValuePair("type", "checkitem"));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -257,7 +280,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("checked", "false"));
         nameValuePairs.add(new BasicNameValuePair("type", "checkitem"));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -271,7 +296,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("text", newText));
         nameValuePairs.add(new BasicNameValuePair("type", "note"));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -285,7 +312,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("text", newText));
         nameValuePairs.add(new BasicNameValuePair("type", "comment"));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -299,7 +328,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("text", newText));
         nameValuePairs.add(new BasicNameValuePair("type", "checkitem"));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -313,7 +344,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("catch:starred", "true"));
         nameValuePairs.add(new BasicNameValuePair("type", "checkitem"));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -327,7 +360,9 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("catch:starred", "false"));
         nameValuePairs.add(new BasicNameValuePair("type", "checkitem"));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -339,7 +374,9 @@ public class catchConnector {
         List nameValuePairs = new ArrayList(1);
         nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
+        entity = response.getEntity();
         return response;
 
     }
@@ -351,7 +388,9 @@ public class catchConnector {
         List nameValuePairs = new ArrayList(1);
         nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
         delete.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(delete);
+        entity = response.getEntity();
         return response;
 
     }
@@ -363,7 +402,9 @@ public class catchConnector {
         List nameValuePairs = new ArrayList(1);
         nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
         delete.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(delete);
+        entity = response.getEntity();
         return response;
 
     }
@@ -375,7 +416,9 @@ public class catchConnector {
         List nameValuePairs = new ArrayList(1);
         nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
         delete.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(delete);
+        entity = response.getEntity();
         return response;
 
     }
@@ -387,13 +430,14 @@ public class catchConnector {
         StringBody noteIdStr = new StringBody(noteId);
         StringBody type = new StringBody("attachment");
 
-        MultipartEntity entity = new MultipartEntity();
-        entity.addPart(new FormBodyPart("file", new FileBody(new File(filePath))));
-        entity.addPart("child_of", noteIdStr);
-        entity.addPart("type", type);
-        post.setEntity(entity);
-
+        MultipartEntity entity2 = new MultipartEntity();
+        entity2.addPart(new FormBodyPart("file", new FileBody(new File(filePath))));
+        entity2.addPart("child_of", noteIdStr);
+        entity2.addPart("type", type);
+        post.setEntity(entity2);
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(post);
+        entity = response.getEntity();
         return response;
 
     }
@@ -402,7 +446,10 @@ public class catchConnector {
 
         HttpGet get = new HttpGet(getContributorsUrl(streamId));
         get.setHeader("Authorization", "Basic " + encodedLoginData);
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(get);
+        
+        entity = response.getEntity();
         return response;
 
     }
@@ -411,7 +458,9 @@ public class catchConnector {
 
         HttpDelete delete = new HttpDelete(getContributorUrl(streamId, contributorId));
         delete.setHeader("Authorization", "Basic " + encodedLoginData);
+        EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(delete);
+        entity = response.getEntity();
         return response;
 
     }
@@ -463,18 +512,17 @@ public class catchConnector {
     //komentarz dodany celem sprawdzenia synchronizacji przez Kamila.
     public static void main(String[] args) throws ClientProtocolException, IOException, ParseException {
         catchConnector connector = new catchConnector("nastasja", "filipovna");
+        catchConnector connector2 = new catchConnector("nastasja", "filipovna");
+        catchConnector connector3 = new catchConnector("nastasja", "filipovna");
         HttpResponse response = connector.getStreams();
 
-
-        // catchStream bigStream = new catchStream(response);
-
-        // System.out.println("" + bigStream.getModified_at() + " " + bigStream.getName() + " " + bigStream.getSource());
-
         List<miniStream> streamList = new miniStreamList(response).getStreams();
+        connector2.deleteStream(streamList.get(0).getId(), streamList.get(0).getServer_modified_at());
+        ///HttpResponse response4 = connector.getStreams();
         
-        HttpResponse response3 = connector.getStream("50a54d980731a3178806a351");
+        HttpResponse response3 = connector3.getStream("50a54d980731a3178806a351");
         catchStream stream1 = new catchStream(response3);
-        HttpResponse response1 = connector.getObjectsInStream("50a54d980731a3178806a351", "50b0b79c0731a37825ca8d82");
+        HttpResponse response1 = connector2.getObjectsInStream("50a54d980731a3178806a351", "50b0b79c0731a37825ca8d82");
         catchObject note1 = new catchObject(response1);
         String text = note1.getText();
         System.out.print(text+ "\n\n");

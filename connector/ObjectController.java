@@ -21,13 +21,14 @@ import org.json.simple.parser.ParseException;
  */
 public class ObjectController {
 
+    
     private catchConnector connector;
     //  private miniObject miniobject;
     private List<catchObject> catchObjectsList = new ArrayList<catchObject>();
     private catchStream catchstream;
 
-    public ObjectController(catchStream catchstream) throws UnsupportedEncodingException, IOException, ParseException {
-        connector = new catchConnector("kamildzi", "soos07");
+    public ObjectController(catchStream catchstream,catchConnector connector) throws UnsupportedEncodingException, IOException, ParseException {
+        this.connector = connector;
         this.catchstream = catchstream;
         getObjectsFromCatchStream(catchstream);
     }
@@ -39,7 +40,7 @@ public class ObjectController {
             catchObject catchobject = new catchObject(connector.getObjectsInStream(catchstream.getId(), objectId));
             catchObjectsList.add(catchobject);
         }
-        System.out.println("id obiektu to hehe " + catchObjectsList.get(0).getId());
+
         //  return catchObjectsList;
     }
 
@@ -50,21 +51,23 @@ public class ObjectController {
             Class.forName(sDriverName);
         } catch (ClassNotFoundException e) {
             System.err.println(e);
+            
         }
 
         Connection connection = null;
+         for (catchObject catchobject : catchObjectsList) {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);
 
-            int i = 0;
-            for (catchObject catchobject : catchObjectsList) {
-                i++;
+            
+           
+                
                 //catchobject.getChild_of()
-                System.out.println("id obiektu prawdziewe to " + catchobject.getId());
-                statement.executeUpdate("insert into OBJECTS values(" + "'" + catchobject.getId() + "'" + ", " + catchobject.getCount() + ", " + catchobject.getServer_deleted_at() + ", " + catchobject.getN_streams() + ", " + "'" + catchobject.getText() + "'" + ", " + "'" + catchobject.getCreated_at() + "'" + ", " + "'" + catchobject.getModified_at() + "'" + ", " + "'" + catchobject.isLegacy_v2_share() + "'" + ", " + catchobject.getServer_modified_at() + ", " + "'" + catchobject.getChild_of() + "'" + ", " + "'" + catchobject.getAnnotations().get("catch:starred") + "'" + ", " + "'" + catchobject.getType() + "'" + ", " + 000000 + ", " + 0000001 + ", " + "'" + catchobject.getContent_type() + "'" + ", " + catchobject.getSize() + ", " + "'" + catchobject.getFilename() + "'" + ", " + "'" + catchobject.isChecked() + "'" + ", " + "'modifiedLocaly dodane recznie'" + ", " + "'deletedLocaly dodane recznie'" + ", " + "'isuptodate dodane recznie'" + ", " + "'filepath dodane recznie" + i + "'" + ")");
-            }
+                
+                statement.executeUpdate("insert into OBJECTS values(" + "'" + catchobject.getId() + "'" + ", " + catchobject.getCount() + ", " + catchobject.getServer_deleted_at() + ", " + catchobject.getN_streams() + ", " + "'" + catchobject.getText() + "'" + ", " + "'" + catchobject.getCreated_at() + "'" + ", " + "'" + catchobject.getModified_at() + "'" + ", " + "'" + catchobject.isLegacy_v2_share() + "'" + ", " + catchobject.getServer_modified_at() + ", " + "'" + catchobject.getChild_of() + "'" + ", " + "'" + catchobject.getAnnotations().get("catch:starred") + "'" + ", " + "'" + catchobject.getType() + "'" + ", " + 000000 + ", " + 0000001 + ", " + "'" + catchobject.getContent_type() + "'" + ", " + catchobject.getSize() + ", " + "'" + catchobject.getFilename() + "'" + ", " + "'" + catchobject.isChecked() + "'" + ", " + "'modifiedLocaly dodane recznie'" + ", " + "'deletedLocaly dodane recznie'" + ", " + "'isuptodate dodane recznie'" + ", '" + catchobject.getId() + "')");
+            
             // System.out.println("id obiektu "+catchstream.getObjects().size());
 
         } catch (SQLException e) {
@@ -79,8 +82,10 @@ public class ObjectController {
             } catch (SQLException e) {
                 // connection close failed.
                 System.err.println(e);
+                
             }
         }
+         }
     }
 
     public void addObjectsInStreamsToDatabase() throws IOException, ParseException {
@@ -98,8 +103,8 @@ public class ObjectController {
             statement.setQueryTimeout(30);
 
             for (int i = 0; i < catchObjectsList.size(); i++) {
-                // System.out.println("id usera w users to "+userIdList.get(i) + "a jego name to" + userNameList.get(i));
                 statement.executeUpdate("insert into OBJECT_IN_STREAM values(" + "'" + catchObjectsList.get(i).getId() + "'" + ", " + "'" + catchstream.getId() + "'" + ")");
+                
             }
 
 

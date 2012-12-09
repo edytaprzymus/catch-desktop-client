@@ -4,10 +4,14 @@
  */
 package gui.component;
 
+import connector.Database;
 import connector.StreamFromLocal;
+import connector.Synchronizer;
+import connector.catchConnector;
 import connector.miniStream;
 import gui.Controller;
 import java.awt.Component;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -71,6 +75,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         synchronizeButton = new javax.swing.JButton();
+        synchroInfoLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -335,6 +340,14 @@ public class MainFrame extends javax.swing.JFrame {
                 synchronizeButtonMouseClicked(evt);
             }
         });
+        synchronizeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                synchronizeButtonActionPerformed(evt);
+            }
+        });
+
+        synchroInfoLabel.setText("Trwa synchronizacja....");
+        synchroInfoLabel.setVisible(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -345,6 +358,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(210, 210, 210)
                 .addComponent(synchronizeButton)
+                .addGap(26, 26, 26)
+                .addComponent(synchroInfoLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -353,7 +368,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(synchronizeButton))
+                    .addComponent(synchronizeButton)
+                    .addComponent(synchroInfoLabel))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
@@ -370,8 +386,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(createStreamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(sideTabbedPane))
                         .addGap(18, 18, 18)
-                        .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -427,8 +442,18 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_editStreamButtonMouseClicked
 
     private void synchronizeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_synchronizeButtonMouseClicked
-       refreshAllStreamsPanel();
+        catchConnector connector = Database.getUser();
+        synchroInfoLabel.setVisible(true);
+        synchronizer = new Synchronizer();
+        synchronizer.run(connector);
+        synchroInfoLabel.setText("Ostatnia synchronizacja: "+new Date());
+        
+        refreshAllStreamsPanel();
     }//GEN-LAST:event_synchronizeButtonMouseClicked
+
+    private void synchronizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_synchronizeButtonActionPerformed
+        
+    }//GEN-LAST:event_synchronizeButtonActionPerformed
 
     private void createNotePanels() {
        NotePanel np = new NotePanel(this);
@@ -515,6 +540,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane sideTabbedPane;
     private javax.swing.JComboBox sortNotesCombo;
     private javax.swing.JLabel sortNotesLabel;
+    private javax.swing.JLabel synchroInfoLabel;
     private javax.swing.JButton synchronizeButton;
     // End of variables declaration//GEN-END:variables
     private LinkedList<NotePanel> notePanels;
@@ -522,5 +548,6 @@ public class MainFrame extends javax.swing.JFrame {
     private LinkedList<StreamLinkPanel> streamLinks = new LinkedList<>();
     private Controller controller;
     private StreamFromLocal streamFromLocal = new StreamFromLocal();
+    private Synchronizer synchronizer;
 
 }

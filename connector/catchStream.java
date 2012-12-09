@@ -147,6 +147,7 @@ public final class catchStream {
         String str = "";
         while ((line = rd.readLine()) != null) {
             str += line;
+           
         }
         String replaceAll = str.replaceAll("\\s", "");
         JSONParser parser = new JSONParser();

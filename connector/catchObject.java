@@ -209,6 +209,10 @@ public final class catchObject {
         }
 
         text = (String) jsonResult.get(TAG_TEXT);
+       // if(text.contains("\\#")) {
+         
+         text = text.replaceAll("'","''");
+      //  }
         count = (long) jsonResult.get(TAG_COUNT);
         created_at = (String) jsonResult.get(TAG_CREATED_AT);
         id = (String) jsonResult.get(TAG_ID);

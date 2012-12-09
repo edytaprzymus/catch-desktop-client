@@ -65,7 +65,6 @@ public class ObjectController {
            
                 
                 //catchobject.getChild_of()
-                
                 statement.executeUpdate("insert into OBJECTS values(" + "'" + catchobject.getId() + "'" + ", " + catchobject.getCount() + ", " + catchobject.getServer_deleted_at() + ", " + catchobject.getN_streams() + ", " + "'" + catchobject.getText() + "'" + ", " + "'" + catchobject.getCreated_at() + "'" + ", " + "'" + catchobject.getModified_at() + "'" + ", " + "'" + catchobject.isLegacy_v2_share() + "'" + ", " + catchobject.getServer_modified_at() + ", " + "'" + catchobject.getChild_of() + "'" + ", " + "'" + catchobject.getAnnotations().get("catch:starred") + "'" + ", " + "'" + catchobject.getType() + "'" + ", " + 000000 + ", " + 0000001 + ", " + "'" + catchobject.getContent_type() + "'" + ", " + catchobject.getSize() + ", " + "'" + catchobject.getFilename() + "'" + ", " + "'" + catchobject.isChecked() + "'" + ", " + "'modifiedLocaly dodane recznie'" + ", " + "'deletedLocaly dodane recznie'" + ", " + "'isuptodate dodane recznie'" + ", '" + catchobject.getId() + "')");
             
             // System.out.println("id obiektu "+catchstream.getObjects().size());

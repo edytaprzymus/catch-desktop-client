@@ -487,8 +487,8 @@ public class catchConnector {
         }
         ObjectController objectController2 = new ObjectController(stream1);
         objectController2.addObjectToDataBase();
-
         
+        // System.out.println("stream id to " + str.getId());
         
         //  System.out.println("scaigneity stream to   "+ streamcatch.getId() + " i jeszcze " + streamcatch.getName());
         //  StreamController streamController2 = new StreamController(streamList.get(1));

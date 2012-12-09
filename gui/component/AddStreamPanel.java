@@ -65,7 +65,7 @@ public class AddStreamPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createStreamButtonActionPerformed
-        //new StreamFromLocal().
+        //parent.getController().getCatchConnector().get
     }//GEN-LAST:event_createStreamButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

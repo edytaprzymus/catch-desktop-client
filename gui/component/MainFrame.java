@@ -518,7 +518,7 @@ public class MainFrame extends javax.swing.JFrame {
         refreshNotesPanel();
     }
     
-    private void refreshNotesPanel() {
+    public void refreshNotesPanel() {
        for (Component comp : mainPanel.getComponents() ) {
           if (comp instanceof NotePanel) mainPanel.remove(comp);
        }
@@ -612,6 +612,10 @@ public class MainFrame extends javax.swing.JFrame {
         }
         return result;
     }
+    
+    public Controller getController() {
+        return controller;
+    }
     /**
      * @param args the command line arguments
      */
@@ -677,7 +681,7 @@ public class MainFrame extends javax.swing.JFrame {
     private Controller controller;
     private StreamFromLocal streamFromLocal = new StreamFromLocal();
     private ObjectFromLocal objectFromLocal = new ObjectFromLocal();
-    private String currentStreamId="*";
+    private String currentStreamId="default";
     private List<catchObject> allObjectsFromCurrentId;
     private List<catchObject> allNotesFromCurrentId = new LinkedList<>();
     private List<catchObject> allTasksFromCurrentId = new LinkedList<>();

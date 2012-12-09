@@ -9,7 +9,7 @@ import gui.component.*;
  * @author Przemo
  */
 public class Controller {
-    LoginDialog dialog = new LoginDialog(new javax.swing.JFrame(), true, this);
+    LoginDialog dialog;
     catchConnector connector;
     MainFrame mainFrame;
     
@@ -20,6 +20,7 @@ public class Controller {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(LoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        dialog = new LoginDialog(new javax.swing.JFrame(), true, this);
         dialog.setVisible(true);  
         if (dialog.getReturnStatus() == 1) {
             startMainFrame();

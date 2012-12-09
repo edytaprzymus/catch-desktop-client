@@ -4,6 +4,9 @@
  */
 package gui.component;
 
+import connector.ObjectFromLocal;
+import connector.catchObject;
+
 /**
  *
  * @author Prezes
@@ -13,7 +16,9 @@ public class NotesBottomPanel extends javax.swing.JPanel {
     /**
      * Creates new form NoteBottomPanel
      */
-    public NotesBottomPanel() {
+    public NotesBottomPanel(MainFrame parent, catchObject note) {
+        this.parent = parent;
+        this.note = note;
         initComponents();
     }
 
@@ -32,7 +37,7 @@ public class NotesBottomPanel extends javax.swing.JPanel {
         addFileButton = new javax.swing.JButton();
         organizeButton = new javax.swing.JButton();
         deleteNoteButton = new javax.swing.JButton();
-        addLocationButton = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
 
         addTaskButton.setText("dodaj zadanie");
 
@@ -48,8 +53,14 @@ public class NotesBottomPanel extends javax.swing.JPanel {
         });
 
         deleteNoteButton.setText("usuń");
+        
+        deleteNoteButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteNoteButtonMouseClicked(evt);
+            }
+        });
 
-        addLocationButton.setText("dodaj lokalizację");
+        saveButton.setText("dodaj lokalizację");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -67,7 +78,7 @@ public class NotesBottomPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(deleteNoteButton)
                 .addGap(18, 18, 18)
-                .addComponent(addLocationButton)
+                .addComponent(saveButton)
                 .addGap(0, 126, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -81,7 +92,7 @@ public class NotesBottomPanel extends javax.swing.JPanel {
                     .addComponent(addFileButton)
                     .addComponent(organizeButton)
                     .addComponent(deleteNoteButton)
-                    .addComponent(addLocationButton)))
+                    .addComponent(saveButton)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -90,14 +101,22 @@ public class NotesBottomPanel extends javax.swing.JPanel {
         organizeWindow.setVisible(true);
         
     }//GEN-LAST:event_organizeButtonMouseClicked
+    
+    private void deleteNoteButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_organizeButtonMouseClicked
+       new ObjectFromLocal().deleteObject(note.getId());
+       parent.refreshNotesPanel();
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCommentButton;
     private javax.swing.JButton addFileButton;
-    private javax.swing.JButton addLocationButton;
+    private javax.swing.JButton saveButton;
     private javax.swing.JButton addTaskButton;
     private javax.swing.JButton deleteNoteButton;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton organizeButton;
     // End of variables declaration//GEN-END:variables
+    catchObject note;
+    MainFrame parent;
 }

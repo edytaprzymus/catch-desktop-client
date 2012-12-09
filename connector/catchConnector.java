@@ -497,6 +497,11 @@ public class catchConnector {
         objectFromLocal.getObjects();
         objectFromLocal.updateObject(objectController.getCatchObjectsList().get(0));
         catchObject c = objectFromLocal.getObject(objectController.getCatchObjectsList().get(0).getId());
+        c = objectFromLocal.createObject(streamList.get(0).getId());
+        
+      //  System.out.println("object id to " + c.getId());
+        
+        
 
 
         StreamFromLocal s = new StreamFromLocal();
@@ -506,7 +511,9 @@ public class catchConnector {
         catchStream streamcatch = s.getStream(streamController.getCatchStream().getId());
         
         System.out.println("id obiektow w streamie to hehe " + s.getObjectsFromSteam(streamcatch.getId()).get(0).getId() );
+        catchStream str = s.createStream("35377177");
         
+        // System.out.println("stream id to " + str.getId());
         
         //  System.out.println("scaigneity stream to   "+ streamcatch.getId() + " i jeszcze " + streamcatch.getName());
         //  StreamController streamController2 = new StreamController(streamList.get(1));

@@ -123,10 +123,14 @@ public class StreamFromLocal {
             connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);
-            rs = statement.executeQuery("select stream_id, server_created_at, server_modified_at, count, name, user_color, color from streams");
+            rs = statement.executeQuery("select stream_id, server_created_at, server_modified_at, count, name, user_color, color, deleted_locally, modified_locally from streams");
             int i = 0;
             while (rs.next()) {
-                ministream.add(new miniStream((String) rs.getString("stream_id"), (String) rs.getString("server_modified_at"), (long) rs.getLong("count"), (String) rs.getString("server_created_at"), (String) rs.getString("name"), getHashMap((String) rs.getString("user_color"), (String) rs.getString("color"))));
+                miniStream mS = new miniStream((String) rs.getString("stream_id"), (String) rs.getString("server_modified_at"), (long) rs.getLong("count"), (String) rs.getString("server_created_at"), (String) rs.getString("name"), getHashMap((String) rs.getString("user_color"), (String) rs.getString("color")));
+                mS.setDeleted_locally(rs.getString("deleted_locally"));        
+                mS.setModified_locally(rs.getString("modified_locally"));        
+                ministream.add(mS);
+                
             }
 
         } catch (SQLException e) {

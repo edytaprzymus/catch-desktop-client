@@ -4,6 +4,8 @@
  */
 package gui.component;
 
+import connector.Database;
+import connector.Synchronizer;
 import connector.ObjectFromLocal;
 import connector.StreamFromLocal;
 import connector.catchConnector;
@@ -55,9 +57,10 @@ public class MainFrame extends javax.swing.JFrame {
         sharedStreamsPanel = new javax.swing.JPanel();
         createStreamPanel = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
+        headerPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         synchronizeButton = new javax.swing.JButton();
+        synchroInfoLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         mainPanel = new javax.swing.JPanel();
         mainHeaderPanel = new javax.swing.JPanel();
@@ -116,7 +119,7 @@ public class MainFrame extends javax.swing.JFrame {
         createStreamPanel.setLayout(new javax.swing.BoxLayout(createStreamPanel, javax.swing.BoxLayout.LINE_AXIS));
         createStreamPanel.add(jSeparator1);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        headerPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel2.setText("zalogowany jako: ");
 
@@ -128,26 +131,34 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        synchroInfoLabel.setText("Trwa synchronizacja...");
+        synchroInfoLabel.setToolTipText("");
+
+        javax.swing.GroupLayout headerPanelLayout = new javax.swing.GroupLayout(headerPanel);
+        headerPanel.setLayout(headerPanelLayout);
+        headerPanelLayout.setHorizontalGroup(
+            headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(210, 210, 210)
                 .addComponent(synchronizeButton)
-                .addContainerGap(664, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(synchroInfoLabel)
+                .addContainerGap(536, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        headerPanelLayout.setVerticalGroup(
+            headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(synchronizeButton))
+                    .addComponent(synchronizeButton)
+                    .addComponent(synchroInfoLabel))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
+
+        synchroInfoLabel.setVisible(false);
 
         mainPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEtchedBorder(), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
         mainPanel.setMinimumSize(new java.awt.Dimension(200, 0));
@@ -290,6 +301,7 @@ public class MainFrame extends javax.swing.JFrame {
         editStreamPanel.setVisible(false);
 
         notesOptionsPanel.setBackground(new java.awt.Color(153, 255, 204));
+        notesOptionsPanel.setMaximumSize(new java.awt.Dimension(32767, 70));
         notesOptionsPanel.setPreferredSize(new java.awt.Dimension(700, 70));
 
         newNoteButton.setText("Nowa Notatka");
@@ -358,7 +370,7 @@ public class MainFrame extends javax.swing.JFrame {
         notesOptionsPanelLayout.setVerticalGroup(
             notesOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(notesOptionsPanelLayout.createSequentialGroup()
-                .addContainerGap(108, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(notesOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sortNotesLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(editNotesLabel, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -383,7 +395,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(createStreamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -396,7 +408,7 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(55, 55, 55)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
@@ -405,8 +417,8 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(createStreamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)))
+                .addGap(53, 53, 53))
         );
 
         sideTabbedPane.getAccessibleContext().setAccessibleName("Wszystki Przestrzenie");
@@ -447,11 +459,17 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_editStreamButtonMouseClicked
 
     private void synchronizeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_synchronizeButtonMouseClicked
-//       catchConnector connector = Database.getUser();
-//       synchroInfoLabel.setVisible(true);
-//       synchronizer = new Synchronizer();
-//       synchronizer.run(connector);
-//       synchroInfoLabel.setText("Ostatnia synchronizacja: "+new Date());
+       //synchroInfoLabel.setText("Trwa synchronizacja...");
+       synchroInfoLabel.setVisible(true);
+       synchroInfoLabel.update(synchroInfoLabel.getGraphics());
+       
+       synchroInfoLabel.repaint();
+       headerPanel.revalidate();
+        catchConnector connector = Database.getUser();
+       
+       synchronizer = new Synchronizer();
+       synchronizer.run(connector);
+       synchroInfoLabel.setText("Ostatnia synchronizacja: "+new Date());
        refreshAllStreamsPanel();
        refreshNotesPanel();
     }//GEN-LAST:event_synchronizeButtonMouseClicked
@@ -632,10 +650,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton editStreamButton;
     private javax.swing.JPanel editStreamPanel;
     private javax.swing.JButton expandAllButton;
+    private javax.swing.JPanel headerPanel;
     private javax.swing.JToggleButton inviteButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel mainHeaderPanel;
@@ -650,6 +668,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane sideTabbedPane;
     private javax.swing.JComboBox sortNotesCombo;
     private javax.swing.JLabel sortNotesLabel;
+    private javax.swing.JLabel synchroInfoLabel;
     private javax.swing.JButton synchronizeButton;
     // End of variables declaration//GEN-END:variables
     private LinkedList<NotePanel> notePanels;
@@ -661,9 +680,9 @@ public class MainFrame extends javax.swing.JFrame {
     private String currentStreamId="*";
     private List<catchObject> allObjectsFromCurrentId;
     private List<catchObject> allNotesFromCurrentId = new LinkedList<>();
-   private List<catchObject> allTasksFromCurrentId = new LinkedList<>();
-   private List<catchObject> allCommentsFromCurrentId = new LinkedList<>();
+    private List<catchObject> allTasksFromCurrentId = new LinkedList<>();
+    private List<catchObject> allCommentsFromCurrentId = new LinkedList<>();
    
-   //private Synchronizer synchronizer;
+    private Synchronizer synchronizer;
 
 }

@@ -22,11 +22,11 @@ public class NotePanel extends javax.swing.JPanel {
     public NotePanel(catchObject object, MainFrame parent) {
         this.note = object;
         this.parent = parent;
-        fillNoteText();
         initComponents();
         createTasksPanel();
         createCommentsPanel();
         addNotesBottomPanel();
+        fillNoteText();
     }
 
     /**
@@ -48,6 +48,7 @@ public class NotePanel extends javax.swing.JPanel {
         checkedTasksCheckBox = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
+        setMaximumSize(new java.awt.Dimension(32767, 125));
         setPreferredSize(new java.awt.Dimension(700, 125));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -209,7 +210,9 @@ public class NotePanel extends javax.swing.JPanel {
     }
     
     public void fillNoteText() {
-        noteText.setText(note.getText());
+       if (note.getText() != null) {
+           noteText.setText(note.getText());
+       }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

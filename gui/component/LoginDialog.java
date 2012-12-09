@@ -4,6 +4,8 @@
  */
 package gui.component;
 
+import connector.Database;
+import connector.Synchronizer;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -16,14 +18,17 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import connector.catchConnector;
+import connector.miniStreamList;
 import gui.Controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -84,6 +89,7 @@ public class LoginDialog extends javax.swing.JDialog {
         jPasswordLabel = new javax.swing.JLabel();
         jLoginInfoLabel = new javax.swing.JLabel();
         wrongLoginPasswdLabel = new javax.swing.JLabel();
+        synchroInfoLabel = new javax.swing.JLabel();
 
         setTitle("Log in to ");
         setResizable(false);
@@ -162,10 +168,19 @@ public class LoginDialog extends javax.swing.JDialog {
         wrongLoginPasswdLabel.setToolTipText("");
         wrongLoginPasswdLabel.setVisible(false);
 
+        synchroInfoLabel.setText("synchroLabel");
+        synchroInfoLabel.setVisible(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(wrongLoginPasswdLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLoginInfoLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(82, 82, 82))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -175,14 +190,11 @@ public class LoginDialog extends javax.swing.JDialog {
                         .addComponent(cancelButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(55, 55, 55)
-                        .addComponent(jLoginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLoginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addComponent(synchroInfoLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(wrongLoginPasswdLabel)
-                    .addComponent(jLoginInfoLabel))
-                .addGap(82, 82, 82))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, okButton});
@@ -196,7 +208,9 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addComponent(jLoginInfoLabel)
                 .addGap(18, 18, 18)
                 .addComponent(jLoginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addComponent(synchroInfoLabel)
+                .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton))
@@ -209,26 +223,52 @@ public class LoginDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        
-       try {           
+         synchroInfoLabel.setText("Proszę czekać. Trwa logowanie...");
+         
+         synchroInfoLabel.setVisible(true);
          String userNameString = userName.getText();
          String userPasswdString = userPassword.getText();
+         HttpResponse response = null;
          catchConnector connector = new catchConnector(userNameString, userPasswdString);
-         HttpResponse response = connector.getStreams();
+         boolean status= false;
          
-         if (response != null && response.getStatusLine().getStatusCode() == 200) {
+         try {     //sprawdzam polaczenie      
+             response = connector.getStreams();
+               
+            try {
+                status = (connector.getResponseStatus(response)==0?true:false);
+            } catch (ParseException ex) {
+                System.err.println("Blad przy logowaniu");
+            }
+        
+         } catch (UnknownHostException e) {
+            System.err.println("Brak polaczenia");
+            synchroInfoLabel.setText("Brak połączenia z internetem. Praca lokalna");
+            if(!Database.checkUser(connector.getEncodedLoginData())) {  //przy braku polaczenia sprawdzam czy loguje sie uzytkownik bedacy wlascicielem bazy
+                doClose(RET_OK);
+                return;
+            }
+            
+         } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+         } 
+         
+         //jezeli jest polaczenie to sie loguje i synchronizuje baze z serwerem
+         if (response != null && status) {
+             synchroInfoLabel.setText("Zalogowano, Proszę czekać trwa synchronizacja...");
+            
              
+             Synchronizer synchronizer = new Synchronizer();
+             synchronizer.run(connector,true);
              doClose(RET_OK);
-             
+            
          } else {
              wrongLoginPasswdLabel.setVisible(true);
+             synchroInfoLabel.setVisible(false);
+            
          }
-         if( response.getEntity() != null ) {
-         response.getEntity().consumeContent();
-      }
-        } catch (IOException ex) {
-            Logger.getLogger(LoginDialog.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+         
+       
     }//GEN-LAST:event_okButtonActionPerformed
     
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -282,6 +322,7 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jNameLabel;
     private javax.swing.JLabel jPasswordLabel;
     private javax.swing.JButton okButton;
+    private javax.swing.JLabel synchroInfoLabel;
     private javax.swing.JTextField userName;
     private javax.swing.JPasswordField userPassword;
     private javax.swing.JLabel wrongLoginPasswdLabel;

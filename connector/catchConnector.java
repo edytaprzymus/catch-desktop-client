@@ -70,21 +70,40 @@ class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
 public class catchConnector {
 
     private String encodedLoginData;
+    private String login;
     private static String basicUrl = "https://api.catch.com/v3/";
     private HttpClient httpClient = new DefaultHttpClient();
     private static HttpEntity entity  = null;
 
     public catchConnector(String login, String password) {
 
+        this.login = login;
         String stringToConvert = login + ":" + password;
         byte[] theByteArray = stringToConvert.getBytes();
         Base64 base64 = new Base64();
         encodedLoginData = base64.encodeAsString(theByteArray);
 
     }
+    
+    /**
+     * Metodka odpalana tylko przy uruchomieniu okna, zczytane z bazy dane pakuje do connectora zebym mogl synchronizowac
+     * @param login
+     * @param encodedLoginData
+     * @param db 
+     */
+    public catchConnector(String login, String encodedLoginData,boolean db) {
+
+        this.login = login;
+        this.encodedLoginData = encodedLoginData;
+
+    }
 
     public String getEncodedLoginData() {
         return encodedLoginData;
+    }
+    
+    public String getLogin() {
+        return login;
     }
 
     public String getStreamsUrl() {
@@ -527,69 +546,8 @@ public class catchConnector {
         }
     }
 
-    //komentarz dodany celem sprawdzenia synchronizacji przez Kamila.
+    
     public static void main(String[] args) throws ClientProtocolException, IOException, ParseException {
-        catchConnector connector = new catchConnector("nastasja", "filipovna");
-        catchConnector connector2 = new catchConnector("nastasja", "filipovna");
-        catchConnector connector3 = new catchConnector("nastasja", "filipovna");
-        HttpResponse response = connector.getStreams();
-
-        List<miniStream> streamList = new miniStreamList(response).getStreams();
-        connector2.deleteStream(streamList.get(0).getId(), streamList.get(0).getServer_modified_at());
-        HttpResponse response4 = connector.getStreams();
-        
-        HttpResponse response3 = connector3.getStream("50a54d980731a3178806a351");
-        catchStream stream1 = new catchStream(response3);
-        HttpResponse response1 = connector2.getObjectsInStream("50a54d980731a3178806a351", "50b0b79c0731a37825ca8d82");
-        catchObject note1 = new catchObject(response1);
-        String text = note1.getText();
-        System.out.print(text+ "\n\n");
-        for (int i = 0; i < text.length(); i++){
-            char c = text.charAt(i);  
-            if ((int) c < 32){
-                System.out.print(c + "\n");
-                System.out.print((int) c + "\n");
-            }
-        }
-        ObjectController objectController2 = new ObjectController(stream1);
-        objectController2.addObjectToDataBase();
-        
-        // System.out.println("stream id to " + str.getId());
-        
-        //  System.out.println("scaigneity stream to   "+ streamcatch.getId() + " i jeszcze " + streamcatch.getName());
-        //  StreamController streamController2 = new StreamController(streamList.get(1));
-        // streamController2.addStreamToDataBase();
-        //  streamController2.addContributorsToDatabase();
-
-        //  ObjectController objectController2 = new ObjectController(streamController2.getCatchStream());
-        // objectController2.addObjectToDataBase();
-
-
-        //  catchConnector connector = new catchConnector("nastasja", "filipovna");
-        //  HttpResponse response = connector.getStreams();
-//        List<miniStream> streamList = new miniStreamList(response).getStreams();
-//        System.out.print(streamList.size());
-//        HttpResponse resp2 = connector.getStream(streamList.get(1).getId());
-//        catchStream stream = new catchStream(resp2);
-//        stream.setContributorsMap(connector.getStreamContributors(streamList.get(1).getId()));
-//        HashMap contributors = stream.getContributors();
-//        
-
-//        List<miniStream> streamList2 = new miniStreamList(response).getStreams();
-//        HttpResponse resp2 = connector.getStream(streamList2.get(1).getId());
-//        catchStream stream = new catchStream(resp2);
-//        stream.setContributorsMap(connector.getStreamContributors(streamList2.get(1).getId()));
-//        HashMap contributors = stream.getContributors();
-//        
-//        HttpGet get = new HttpGet("https://api.catch.com/v3/streams/50a8af4c0731a317cfb0584c/50a8b05c70c8021a5b9815db");
-//        get.setHeader("Authorization", "Basic " + connector.encodedLoginData);
-//        HttpResponse response2 = httpClient.execute(get);
-//        
-//        catchObject obj = new catchObject((response2));
-//        List tags = obj.getTags();
-//        System.out.println(tags.size());
-//        connector.deleteStream("50a79c3c0731a3179a37e651", "1353161789519");
-
-
+       
     }
 }

@@ -4,6 +4,8 @@
  */
 package gui.component;
 
+import connector.catchObject;
+
 /**
  *
  * @author Prezes
@@ -13,8 +15,9 @@ public class TaskPanel extends javax.swing.JPanel {
     /**
      * Creates new form TaskPanel
      */
-    public TaskPanel() {
+    public TaskPanel(catchObject note) {
         initComponents();
+        this.note = note;
     }
 
     /**
@@ -30,9 +33,10 @@ public class TaskPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         taskText = new javax.swing.JTextArea();
         taskDeleteButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
-        setBackground(new java.awt.Color(204, 204, 255));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        setPreferredSize(new java.awt.Dimension(700, 97));
 
         jCheckBox1.setBackground(getBackground());
         jCheckBox1.setToolTipText("");
@@ -57,19 +61,21 @@ public class TaskPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jCheckBox1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(taskDeleteButton)
                 .addContainerGap())
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox1)
                     .addComponent(taskDeleteButton)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -80,7 +86,9 @@ public class TaskPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton taskDeleteButton;
     private javax.swing.JTextArea taskText;
     // End of variables declaration//GEN-END:variables
+    catchObject note;
 }

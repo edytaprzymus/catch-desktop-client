@@ -16,7 +16,8 @@ public class StreamLinkPanel extends javax.swing.JPanel {
      * Creates new form StreamLinkPanel
      */
     //StreamLinkPanel(CatchStream stream)
-    public StreamLinkPanel(miniStream stream) {
+    public StreamLinkPanel(miniStream stream, MainFrame parent) {
+        this.parent = parent;
         this.stream = stream;
         initComponents();
         streamNameLabel.setText(stream.getName());
@@ -39,6 +40,11 @@ public class StreamLinkPanel extends javax.swing.JPanel {
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         streamNameLabel.setText("saddasd");
         streamNameLabel.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
@@ -58,8 +64,14 @@ public class StreamLinkPanel extends javax.swing.JPanel {
                 .addComponent(streamNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        parent.setCurrentStreamId(this.getStream().getId());
+    }//GEN-LAST:event_formMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel streamNameLabel;
     // End of variables declaration//GEN-END:variables
     private miniStream stream;
+    private MainFrame parent;
 }

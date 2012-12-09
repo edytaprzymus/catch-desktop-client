@@ -4,16 +4,20 @@
  */
 package gui.component;
 
+import connector.catchObject;
+
 /**
  *
  * @author Prezes
  */
 public class CommentsPanel extends javax.swing.JPanel {
+    
 
     /**
      * Creates new form CommentsPanel
      */
-    public CommentsPanel() {
+    public CommentsPanel(catchObject comment) {
+        this.comment = comment;
         initComponents();
     }
 
@@ -34,6 +38,7 @@ public class CommentsPanel extends javax.swing.JPanel {
         jTextArea1 = new javax.swing.JTextArea();
 
         setBackground(new java.awt.Color(204, 204, 255));
+        setPreferredSize(new java.awt.Dimension(700, 122));
 
         jLabel1.setText("contributor");
 
@@ -60,7 +65,7 @@ public class CommentsPanel extends javax.swing.JPanel {
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 656, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
@@ -87,4 +92,5 @@ public class CommentsPanel extends javax.swing.JPanel {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+    private catchObject comment;
 }

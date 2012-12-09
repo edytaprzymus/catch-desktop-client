@@ -4,6 +4,8 @@
  */
 package gui.component;
 
+import connector.StreamFromLocal;
+
 /**
  *
  * @author Prezes
@@ -13,7 +15,8 @@ public class AddStreamPanel extends javax.swing.JPanel {
     /**
      * Creates new form AddStreamPanel
      */
-    public AddStreamPanel() {
+    public AddStreamPanel(MainFrame parent) {
+        this.parent = parent;
         initComponents();
     }
 
@@ -30,10 +33,14 @@ public class AddStreamPanel extends javax.swing.JPanel {
         createStreamButton = new javax.swing.JButton();
 
         streamNameText.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        streamNameText.setText("nazwa streamu");
 
         createStreamButton.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         createStreamButton.setText("utwórz");
+        createStreamButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createStreamButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -56,8 +63,14 @@ public class AddStreamPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void createStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createStreamButtonActionPerformed
+        //new StreamFromLocal().
+    }//GEN-LAST:event_createStreamButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createStreamButton;
     private javax.swing.JTextField streamNameText;
     // End of variables declaration//GEN-END:variables
+    MainFrame parent;
 }

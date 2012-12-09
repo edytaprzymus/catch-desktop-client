@@ -55,7 +55,7 @@ public class OrganizeNoteWindow extends javax.swing.JDialog {
     }
 
     private void addCreateStreamPanel(){
-        AddStreamPanel addStreamPanel = new AddStreamPanel();
+        AddStreamPanel addStreamPanel = new AddStreamPanel((MainFrame) getParent());
         createStreamPanel.add(addStreamPanel);
     }
     

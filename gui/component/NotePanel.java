@@ -4,7 +4,11 @@
  */
 package gui.component;
 
+import connector.catchObject;
+import connector.miniObject;
 import java.awt.Component;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -15,11 +19,13 @@ public class NotePanel extends javax.swing.JPanel {
     /**
      * Creates new form NotePanel
      */
-    public NotePanel(MainFrame parent) {
+    public NotePanel(catchObject object, MainFrame parent) {
+        this.note = object;
         this.parent = parent;
+        fillNoteText();
         initComponents();
-        addTasksPanel();
-        addCommentsPanel();
+        createTasksPanel();
+        createCommentsPanel();
         addNotesBottomPanel();
     }
 
@@ -42,6 +48,7 @@ public class NotePanel extends javax.swing.JPanel {
         checkedTasksCheckBox = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
+        setPreferredSize(new java.awt.Dimension(700, 125));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
         headerPanel.setBackground(getBackground());
@@ -94,7 +101,7 @@ public class NotePanel extends javax.swing.JPanel {
         add(notePane);
 
         tasksHeaderPanel.setBackground(new java.awt.Color(51, 255, 255));
-        tasksHeaderPanel.setPreferredSize(new java.awt.Dimension(769, 20));
+        tasksHeaderPanel.setPreferredSize(new java.awt.Dimension(700, 20));
         tasksHeaderPanel.setVisible(false);
 
         checkedTasksCheckBox.setEditable(false);
@@ -142,17 +149,25 @@ public class NotePanel extends javax.swing.JPanel {
         expandCollapse(!expanded);
     }//GEN-LAST:event_headerPanelMouseClicked
 
-    private void addTasksPanel() {
-        taskPanel = new TaskPanel();
-        add(taskPanel);
-        taskPanel.setVisible(false);
+    private void createTasksPanel() {
+        taskPanels.clear();
+        for (catchObject task: parent.getTasksFromNote(note.getId())) {
+            TaskPanel taskPanel = new TaskPanel(task);
+            add(taskPanel);
+            taskPanel.setVisible(false); 
+            taskPanels.add(taskPanel);
+        }
+        
     }
     
-    private void addCommentsPanel() {
-        commentsPanel = new CommentsPanel();
-        add(commentsPanel);
-        commentsPanel.setVisible(false);
-
+    private void createCommentsPanel() {
+        commentPanels.clear();
+        for (catchObject comment: parent.getCommentsFromNote(note.getId())) {
+            CommentsPanel commentPanel = new CommentsPanel(comment);
+            add(commentPanel);
+            commentPanel.setVisible(false); 
+            commentPanels.clear();
+        }
     }
     
     private void addNotesBottomPanel() {
@@ -162,13 +177,39 @@ public class NotePanel extends javax.swing.JPanel {
 
     }
     
-    private void expandCollapse(boolean expandCollapse){
+    public void expandCollapse(boolean expandCollapse){
         tasksHeaderPanel.setVisible(expandCollapse);
-        taskPanel.setVisible(expandCollapse);
-        commentsPanel.setVisible(expandCollapse);
+        for (TaskPanel taskPanel : taskPanels) {
+            taskPanel.setVisible(expandCollapse);
+        }
+        for (CommentsPanel commentsPanel : commentPanels) {
+            commentsPanel.setVisible(expandCollapse);
+        }
         notesBottomPanel.setVisible(expandCollapse);
+        this.update(getGraphics());
         parent.pack();
         expanded = expandCollapse;
+    }
+    
+    public void refreshHeader() {
+        noteText.setText(note.getText());
+        for (Component c : this.getComponents()) {
+            if (c instanceof TaskPanel || c instanceof CommentsPanel 
+                    || c instanceof NotesBottomPanel) {
+                this.remove(c);
+            }
+        }
+        createTasksPanel();
+        createCommentsPanel();
+        addNotesBottomPanel();
+        
+        this.validateTree();
+        parent.pack();
+        this.update(this.getGraphics());
+    }
+    
+    public void fillNoteText() {
+        noteText.setText(note.getText());
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,9 +223,13 @@ public class NotePanel extends javax.swing.JPanel {
     private javax.swing.JPanel tasksHeaderPanel;
     // End of variables declaration//GEN-END:variables
     NotesBottomPanel notesBottomPanel;
-    CommentsPanel commentsPanel;
-    TaskPanel taskPanel;
+    //CommentsPanel commentsPanel;
+    List <TaskPanel> taskPanels = new LinkedList<>();
+    List <CommentsPanel> commentPanels = new LinkedList<>();
+
+    //List <String> taskPanels;
     boolean expanded = false;
     MainFrame parent;
+    catchObject note;
     
 }

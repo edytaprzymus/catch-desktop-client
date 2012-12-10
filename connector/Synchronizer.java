@@ -212,8 +212,13 @@ public class Synchronizer {
                         System.out.println("[SYNCHRO]Jakis blad, lista streamow nie pobrana. Zsynchronizuj jeszcze raz");
                         return null;
                      }
-                     
+                 
+                        HttpResponse response2 = connector.getStream("default");
+                        catchStream cStream2 = new catchStream(response2);
+                        miniStream ms2 = cStream2.getMiniStream();
+                        response = connector.getStreams();
 			streamListSv = new miniStreamList(response).getStreams();
+                        streamListSv.add(ms2);
 			System.out.println("Ilosc streamow na serwerze: "+streamListSv.size());
 			for(miniStream mS : streamListSv) {
           
@@ -222,7 +227,8 @@ public class Synchronizer {
 				catchStream cStream = new catchStream(response);
 				ObjectController objectController = new ObjectController(cStream,connector);
 				objectListSv = objectController.getCatchObjectsList();
-				
+				System.out.println(objectListSv.size() + "\n");
+                                
 				if(addToDb) {
 					objectController.addObjectToDataBase();
                                         
@@ -232,6 +238,18 @@ public class Synchronizer {
 				}	
 				
 			}
+                               /* response = connector.getStream("default");
+				catchStream cStream = new catchStream(response);
+				ObjectController objectController = new ObjectController(cStream,connector);
+				objectListSv = objectController.getCatchObjectsList();
+				
+				if(addToDb) {
+					objectController.addObjectToDataBase();
+                                        
+					StreamController streamController = new StreamController(cStream.getMiniStream(),connector);
+					streamController.addStreamToDataBase();
+                                        objectController.addObjectsInStreamsToDatabase();
+				}*/
 		
 		
 		} catch (ParseException e) {

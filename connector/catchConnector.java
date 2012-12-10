@@ -549,5 +549,17 @@ public class catchConnector {
     
     public static void main(String[] args) throws ClientProtocolException, IOException, ParseException {
        
+        catchConnector conn =  new catchConnector("nastasja", "filipovna");
+        HttpResponse resp = conn.getStream("default");
+        catchStream stream1 = new catchStream(resp);
+        System.out.println(stream1.getName());
+        
+        List<miniObject> obj = stream1.getObjects();
+        HttpResponse resp2 = conn.getObjectsInStream("default", obj.get(1).getId());
+        catchObject note = new catchObject(resp2);
+        System.out.println(note.getText());
+        
+        
+        
     }
 }

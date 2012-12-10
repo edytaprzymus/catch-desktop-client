@@ -21,7 +21,8 @@ public class miniStream {
     private String deleted_locally;
     private String modified_locally;
     
-    public miniStream(String _id, String _server_modified_at, Long _contributor_count, String _server_created_at, String _name, HashMap _annotation){
+    public miniStream(String _id, String _server_modified_at, Long _contributor_count,
+            String _server_created_at, String _name, HashMap _annotation){
         
         id = _id;
         server_created_at = _server_created_at;

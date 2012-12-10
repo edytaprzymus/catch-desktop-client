@@ -232,10 +232,12 @@ public final class catchStream {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
             Statement statement = connection.createStatement();
+            Statement statement2 = connection.createStatement();
             statement.setQueryTimeout(30);
+            statement2.setQueryTimeout(30);
 
             
-               rs = statement.executeQuery("select object_id from OBJECT_IN_STREAM where stream_id=('" + streamId +"')");
+               rs = statement2.executeQuery("select object_id from OBJECT_IN_STREAM where stream_id=('" + streamId +"')");
                while (rs.next()) {
                    rs2 = statement.executeQuery(" select  object_id, server_modified_at, type from OBJECTS where object_id =('" + rs.getString(1) +"')");
                    while(rs2.next()) {
@@ -276,16 +278,54 @@ public final class catchStream {
         Object result = jsonObject.get(TAG_RESULT);
         JSONObject jsonResult = (JSONObject) result;
         name = (String) jsonResult.get(TAG_NAME);
-        source = (String) jsonResult.get(TAG_SOURCE);
-        created_at = (String) jsonResult.get(TAG_CREATED_AT);
+        
+        System.out.print(name.toUpperCase() + "\n");
+        
+        if (jsonResult.get(TAG_SOURCE) != null) {
+            source = (String) jsonResult.get(TAG_SOURCE);
+        }
+        else{
+            source = null;
+        }
+        
+        if (jsonResult.get(TAG_CREATED_AT) != null) {
+            created_at = (String) jsonResult.get(TAG_CREATED_AT);
+        }
+        else{
+            created_at = "0";
+        }
+        
         id = (String) jsonResult.get(TAG_ID);
-        modified_at = (String) jsonResult.get(TAG_MODIFIED_AT);
-        server_deleted_at = (String) jsonResult.get(TAG_SERVER_DELETED_AT);
+        
+        if (jsonResult.get(TAG_MODIFIED_AT) != null){
+            modified_at = (String) jsonResult.get(TAG_MODIFIED_AT);
+        }
+        else{
+            modified_at = "0";
+        }
+        
+        if (jsonResult.get(TAG_SERVER_DELETED_AT) != null){
+            server_deleted_at = (String) jsonResult.get(TAG_SERVER_DELETED_AT);
+        }
+        else{
+            server_deleted_at = "0";
+        }
+        
+        if (jsonResult.get(TAG_SERVER_MODIFIED_AT) != null){
         server_modified_at = (String) jsonResult.get(TAG_SERVER_MODIFIED_AT);
+        }
+        else{
+            server_modified_at = "0";
+        }
+        
+        if (jsonResult.get(TAG_SERVER_CREATED_AT) != null){
         server_created_at = (String) jsonResult.get(TAG_SERVER_CREATED_AT);
-
+        }
+        else{
+            server_created_at = "0";
+        }
         //   if (get){
-
+        
         Object jsonAnnotations = jsonResult.get(TAG_ANNOTATIONS);
         if (jsonAnnotations != null) {
             JSONObject jsonAnnotationsObject = (JSONObject) jsonAnnotations;
@@ -297,15 +337,15 @@ public final class catchStream {
             }
 
         }
-
+        System.out.print(name.toUpperCase() + "\n");
         JSONArray objectsJson = (JSONArray) jsonResult.get(TAG_OBJECTS);
         for (int i = 0; i < objectsJson.size(); i++) {
             JSONObject objectJson = (JSONObject) objectsJson.get(i);
             miniObject mini = new miniObject((String) objectJson.get(TAG_ID), (String) objectJson.get(TAG_SERVER_MODIFIED_AT), (String) objectJson.get(TAG_TYPE));
-            //  System.out.println("dodalem obiekt mini o id" + mini.getId());
+            System.out.println("dodalem obiekt mini o id" + mini.getId());
             objects.add(mini);
         }
-        // }
+        //}
 
     }
 
@@ -317,6 +357,13 @@ public final class catchStream {
 
 
 
+    }
+    
+    public miniStream getMiniStream(){
+        Integer y = contributor_count;
+        long x = y.longValue();
+        return new miniStream(id, server_modified_at,x,
+                server_created_at, name, annotations);
     }
 
     public void setContributorsMap(HttpResponse response) throws IOException, ParseException {
@@ -333,16 +380,30 @@ public final class catchStream {
         Object result = jsonObject.get(TAG_RESULT);
         JSONObject jsonResult = (JSONObject) result;
         Object contribs = jsonResult.get(TAG_CONTRIBUTORS);
-        JSONArray jsonContributors = (JSONArray) contribs;
-        for (int i = 0; i < jsonContributors.size(); i++) {
-            JSONObject rec = (JSONObject) jsonContributors.get(i);
-            String uname = (String) rec.get("user_name");
-            System.out.println("uname " + uname + i);
-            String uid = (String) rec.get("id");
-            user_idList.add(uid);
-            user_nameList.add(uname);
-            System.out.println("id usera w users todwed " + user_idList.get(i) + "a jego name todewdew " + user_nameList.get(i) + "  " + i);
-            Object put = contributors.put(uid, uname);
+        if (contribs != null){
+            JSONArray jsonContributors = (JSONArray) contribs;
+            for (int i = 0; i < jsonContributors.size(); i++) {
+                JSONObject rec = (JSONObject) jsonContributors.get(i);
+                String uname = (String) rec.get("user_name");
+                System.out.println("uname " + uname + i);
+                String uid = (String) rec.get("id");
+                user_idList.add(uid);
+                user_nameList.add(uname);
+                System.out.println("id usera w users todwed " + user_idList.get(i) + "a jego name todewdew " + user_nameList.get(i) + "  " + i);
+                Object put = contributors.put(uid, uname);
+            }
         }
+        else{
+            System.out.println("NULL");
+            Object put = contributors.put("0", "0");
+            user_idList.add("0");
+            user_nameList.add("0");
+        }
+    }
+    
+    public void setEmptyContributorsMap(){
+            Object put = contributors.put("nastasja", "35203232");
+            user_idList.add("35203232");
+            user_nameList.add("nastasja");
     }
 }

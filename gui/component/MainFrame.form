@@ -161,6 +161,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="userLabel" min="-2" pref="200" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -168,6 +169,13 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="synchroInfoLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="535" max="32767" attributes="0"/>
+
+                  <EmptySpace min="-2" pref="210" max="-2" attributes="0"/>
+                  <Component id="synchronizeButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="synchroInfoLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="536" max="32767" attributes="0"/>
+
               </Group>
           </Group>
         </DimensionLayout>
@@ -179,7 +187,9 @@
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="synchronizeButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="synchroInfoLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+
                       <Component id="userLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+
                   </Group>
                   <EmptySpace pref="31" max="32767" attributes="0"/>
               </Group>
@@ -189,7 +199,9 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
+
             <Property name="text" type="java.lang.String" value="Zalogowany jako: "/>
+
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="synchronizeButton">
@@ -213,6 +225,7 @@
             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="synchroInfoLabel.setVisible(false);"/>
           </AuxValues>
         </Component>
+
         <Component class="javax.swing.JLabel" name="userLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="User_id"/>
@@ -221,6 +234,7 @@
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="userLabel.setText(Database.getUser().getLogin());"/>
           </AuxValues>
         </Component>
+
       </SubComponents>
     </Container>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -381,13 +395,17 @@
                               <Component id="jLabel1" max="32767" attributes="0"/>
                               <Component id="newStreamNameText" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="125" max="32767" attributes="0"/>
+
+                          <EmptySpace pref="156" max="32767" attributes="0"/>
+
                           <Component id="okButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="doneButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
                           <Component id="deleteStreamButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="129" max="32767" attributes="0"/>
+
+                          <EmptySpace pref="160" max="32767" attributes="0"/>
+
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -431,24 +449,28 @@
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection component="Form" name="background" type="property"/>
                     </Property>
+
                     <Property name="text" type="java.lang.String" value="Zatwierd&#x17a; zmiany"/>
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="okEditStreamClick"/>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okButtonActionPerformed"/>
                   </Events>
+
                 </Component>
                 <Component class="javax.swing.JButton" name="doneButton">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection component="Form" name="background" type="property"/>
                     </Property>
+
                     <Property name="text" type="java.lang.String" value="Anuluj"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="doneButtonActionPerformed"/>
                   </Events>
+
                 </Component>
                 <Component class="javax.swing.JButton" name="deleteStreamButton">
                   <Properties>
@@ -457,10 +479,12 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Usu&#x144; Przestrze&#x144;"/>
                   </Properties>
+
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="deleteStreamClick"/>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteStreamButtonActionPerformed"/>
                   </Events>
+
                 </Component>
               </SubComponents>
             </Container>

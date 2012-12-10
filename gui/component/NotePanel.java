@@ -48,7 +48,7 @@ public class NotePanel extends javax.swing.JPanel {
         checkedTasksCheckBox = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
-        setMaximumSize(new java.awt.Dimension(32767, 125));
+        setMaximumSize(new java.awt.Dimension(32767, 200));
         setPreferredSize(new java.awt.Dimension(700, 125));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -96,6 +96,7 @@ public class NotePanel extends javax.swing.JPanel {
         add(headerPanel);
 
         noteText.setColumns(20);
+        noteText.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         noteText.setRows(5);
         notePane.setViewportView(noteText);
 
@@ -172,7 +173,7 @@ public class NotePanel extends javax.swing.JPanel {
     }
     
     private void addNotesBottomPanel() {
-        notesBottomPanel = new NotesBottomPanel();
+        notesBottomPanel = new NotesBottomPanel(parent, note, this);
         add(notesBottomPanel);
         notesBottomPanel.setVisible(false);
 
@@ -203,8 +204,10 @@ public class NotePanel extends javax.swing.JPanel {
         createTasksPanel();
         createCommentsPanel();
         addNotesBottomPanel();
-        
-        this.validateTree();
+        if (expanded) {
+            expandCollapse(true);
+        }
+        this.validate();
         parent.pack();
         this.update(this.getGraphics());
     }
@@ -213,6 +216,10 @@ public class NotePanel extends javax.swing.JPanel {
        if (note.getText() != null) {
            noteText.setText(note.getText());
        }
+    }
+    
+    public String getNoteText() {
+        return noteText.getText();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -234,5 +241,4 @@ public class NotePanel extends javax.swing.JPanel {
     boolean expanded = false;
     MainFrame parent;
     catchObject note;
-    
 }

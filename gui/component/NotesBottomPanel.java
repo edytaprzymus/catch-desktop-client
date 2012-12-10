@@ -16,7 +16,8 @@ public class NotesBottomPanel extends javax.swing.JPanel {
     /**
      * Creates new form NoteBottomPanel
      */
-    public NotesBottomPanel(MainFrame parent, catchObject note) {
+    public NotesBottomPanel(MainFrame parent, catchObject note, NotePanel notePanel) {
+        this.notePanel = notePanel;
         this.parent = parent;
         this.note = note;
         initComponents();
@@ -60,7 +61,17 @@ public class NotesBottomPanel extends javax.swing.JPanel {
             }
         });
 
-        saveButton.setText("dodaj lokalizację");
+        saveButton.setText("zapisz");
+        saveButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                saveButtonMouseClicked(evt);
+            }
+        });
+        deleteNoteButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteNoteButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -105,7 +116,11 @@ public class NotesBottomPanel extends javax.swing.JPanel {
     private void deleteNoteButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_organizeButtonMouseClicked
        new ObjectFromLocal().deleteObject(note.getId());
        parent.refreshNotesPanel();
-        
+    }
+    
+    private void saveButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_organizeButtonMouseClicked
+       objectFromLocal.updateObjectText(notePanel.getNoteText(), note);
+       notePanel.refreshHeader();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -119,4 +134,6 @@ public class NotesBottomPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     catchObject note;
     MainFrame parent;
+    ObjectFromLocal objectFromLocal = new ObjectFromLocal();
+    NotePanel notePanel;
 }

@@ -130,6 +130,11 @@ public class MainFrame extends javax.swing.JFrame {
                 synchronizeButtonMouseClicked(evt);
             }
         });
+        synchronizeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                synchronizeButtonActionPerformed(evt);
+            }
+        });
 
         synchroInfoLabel.setText("Trwa synchronizacja...");
         synchroInfoLabel.setToolTipText("");
@@ -474,6 +479,7 @@ public class MainFrame extends javax.swing.JFrame {
        refreshNotesPanel();
     }//GEN-LAST:event_synchronizeButtonMouseClicked
 
+    private void synchronizeButtonActionPerformed(java.awt.event.ActionEvent evt) {     }
     private void collapseAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_collapseAllButtonActionPerformed
         expandCollapseAllNotes(false);
     }//GEN-LAST:event_collapseAllButtonActionPerformed

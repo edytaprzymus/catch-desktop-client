@@ -59,7 +59,7 @@ public class Synchronizer {
 	public void run(catchConnector connector) {
 		
 		getDataFromDb();
-		getDataFromServer(connector,false);
+		getDataFromServer(connector,true);
 		synchronize(connector);
 		
 	}
@@ -224,6 +224,7 @@ public class Synchronizer {
           
 				//StreamController streamController = new StreamController(mS);
 				response = connector.getStream(mS.getId());
+                                
 				catchStream cStream = new catchStream(response);
 				ObjectController objectController = new ObjectController(cStream,connector);
 				objectListSv = objectController.getCatchObjectsList();

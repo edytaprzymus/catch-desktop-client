@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -38,7 +40,8 @@ public class ObjectController {
         for (miniObject object : catchstream.getObjects()) {
             String objectId = object.getId();
             catchObject catchobject = new catchObject(connector.getObjectsInStream(catchstream.getId(), objectId));
-            catchObjectsList.add(catchobject);
+            if(!catchObjectsList.contains(catchobject))
+                catchObjectsList.add(catchobject);
         }
 
         //  return catchObjectsList;
@@ -98,12 +101,24 @@ public class ObjectController {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);
-
+            PreparedStatement pStmt = connection.prepareStatement("insert into OBJECT_IN_STREAM values(?,?)");
+   
             for (int i = 0; i < catchObjectsList.size(); i++) {
-                statement.executeUpdate("insert into OBJECT_IN_STREAM values(" + "'" + catchObjectsList.get(i).getId() + "'" + ", " + "'" + catchstream.getId() + "'" + ")");
-                
+                Statement statement = connection.createStatement();
+                Statement statement2 = connection.createStatement();
+                ResultSet rs;
+                rs = statement2.executeQuery("select object_id, stream_id from OBJECT_IN_STREAM where object_id= '" + catchObjectsList.get(i).getId() + "' and stream_id = '" + catchstream.getId() + "'");
+                if(!rs.next()){
+                    pStmt.setString(1, catchObjectsList.get(i).getId()); //This might be pStmt.SetInt(0, fileid) depending on teh type of fileid)
+                    pStmt.setString(2, catchstream.getId());
+                    try{
+                        pStmt.executeUpdate();
+                    }
+                    catch(SQLException e){
+                    }
+                }
+                //statement.setQueryTimeout(30);
+                //statement.executeUpdate("insert into OBJECT_IN_STREAM values(" + "'" + catchObjectsList.get(i).getId() + "'" + ", " + "'" + catchstream.getId() + "'" + ")");
             }
 
 

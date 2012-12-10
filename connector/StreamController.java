@@ -70,6 +70,8 @@ public class StreamController {
             connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);
+            Statement statement2 = connection.createStatement();
+            statement2.setQueryTimeout(30);
 
             //    statement.executeUpdate("drop table if exists person");
             //  statement.executeUpdate("create table person (id integer, name string)");
@@ -80,7 +82,6 @@ public class StreamController {
 
             // Set<String> keyset = ministream.getAnnotations().keySet();
             // System.out.println(""+keyset.toArray()[0]);
-            
             statement.executeUpdate("insert into STREAMS values(" + "'" + catchstream.getId() + "'" + ", " + catchstream.getCount() + ", " + catchstream.getContributor_count() + ", " + "'" + catchstream.getName() + "'" + ", " + "'" + catchstream.getSource() + "'" + ", " + "'" + catchstream.getCreated_at() + "'" + ", " + "'" + catchstream.getModified_at() + "'" + ", " + ministream.getServer_modified_at() + ", " + "'" + ministream.getAnnotations().get("user:color") + "'" + ", " + "'" + ministream.getAnnotations().get("color") + "'" + ", " + ministream.getServer_created_at() + ", " + catchstream.getServer_deleted_at() + ", " + "'YESrecznie'" + ", " + "'0'" + ", " + "'0'" + ")");
 
           //  System.out.println("id obiektu " + catchstream.getObjects().size());

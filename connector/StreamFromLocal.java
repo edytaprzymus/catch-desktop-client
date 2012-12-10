@@ -210,7 +210,7 @@ public class StreamFromLocal {
         List<catchObject> objects = new ArrayList<catchObject>();
         catchStream catchstream = this.getStream(stream_id);
         List<miniObject> miniobjects = catchstream.getObjectsFromStreamId(stream_id);
-        
+        System.out.println("Na tym etapie mamy z kolei " + miniobjects.size());
         ObjectFromLocal o= new ObjectFromLocal();
         
         for(miniObject mini : miniobjects){

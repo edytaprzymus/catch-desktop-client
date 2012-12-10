@@ -638,6 +638,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         } else { 
             allObjectsFromCurrentId = streamFromLocal.getObjectsFromSteam(currentStreamId);
+            System.out.println("Na tym etapie mamy " + allObjectsFromCurrentId.size());
         }
         
         allNotesFromCurrentId.clear();

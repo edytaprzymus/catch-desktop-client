@@ -120,6 +120,11 @@ public class ObjectController {
                     } catch (SQLException e) {
                     }
                 }
+                else{
+                    Statement statement3 = connection.createStatement();
+                    System.out.println("THIS  CASE");
+                    statement3.executeUpdate("update objects set text = '" + catchObjectsList.get(i).getText() +  "' where object_id = '" +  catchObjectsList.get(i).getId() + "'");
+                }
                 //statement.setQueryTimeout(30);
                 //statement.executeUpdate("insert into OBJECT_IN_STREAM values(" + "'" + catchObjectsList.get(i).getId() + "'" + ", " + "'" + catchstream.getId() + "'" + ")");
             }

@@ -64,7 +64,7 @@ public class ObjectFromLocal {
             statement.setQueryTimeout(30);
             int randomId = random.nextInt();
             int randomPath = random.nextInt();
-                statement.executeUpdate("insert into OBJECTS values(" + "'" + randomId + "'" + ", " + 0 + ", " + 0 + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + new Date() + "'" + ", " + "'" + new Date() + "'" + ", " + "'" + "*" + "'" + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + "false" + "'" + ", " + "'" + type + "'" + ", " + 000000 + ", " + 0000001 + ", " + "'" + "*" + "'" + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + 0 + "'" + ", " + "'modifiedLocaly dodane recznie'" + ", " + "'deletedLocaly dodane recznie'" + ", " + "'isuptodate dodane recznie'" + ", " + "'filepath dodane recznie" + randomPath+ "'" + ")");
+                statement.executeUpdate("insert into OBJECTS values(" + "'" + randomId + "'" + ", " + 0 + ", " + 0 + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + new Date() + "'" + ", " + "'" + new Date() + "'" + ", " + "'" + "*" + "'" + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + "false" + "'" + ", " + "'" + type + "'" + ", " + 000000 + ", " + 0000001 + ", " + "'" + "*" + "'" + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + 0 + "'" + ", " + "'modifiedLocaly dodane recznie'" + ", " + "'deletedLocaly dodane recznie'" + ", " + "'newObject'" + ", " + "'filepath dodane recznie" + randomPath+ "'" + ")");
                 statement.executeUpdate("insert into OBJECT_IN_STREAM values(" + "'" + randomId + "'" + ", " + "'" + streamId + "'" + ")");
                catchobject1 = this.getObject(Integer.toString(randomId));
 

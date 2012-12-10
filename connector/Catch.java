@@ -36,7 +36,7 @@ public class Catch {
      */
   public static void main(String[] args) throws ClassNotFoundException, IOException, ParseException
   {
-   
+    System.setProperty("java.awt.headless", "false");
     Controller guiController = new Controller();
   }
 }

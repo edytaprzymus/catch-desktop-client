@@ -18,6 +18,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -508,7 +509,11 @@ public class MainFrame extends javax.swing.JFrame {
         catchConnector connector = Database.getUser();
        
        synchronizer = new Synchronizer();
-       synchronizer.run(connector);
+        try {
+            synchronizer.run(connector);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
        synchroInfoLabel.setText("Ostatnia synchronizacja: "+new Date());
        refreshAllStreamsPanel();
        refreshNotesPanel();
@@ -638,7 +643,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         } else { 
             allObjectsFromCurrentId = streamFromLocal.getObjectsFromSteam(currentStreamId);
-            System.out.println("Na tym etapie mamy " + allObjectsFromCurrentId.size());
         }
         
         allNotesFromCurrentId.clear();

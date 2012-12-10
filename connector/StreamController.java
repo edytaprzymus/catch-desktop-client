@@ -34,13 +34,14 @@ public class StreamController {
         this.catchstream = getStreamFromMiniStream(ministream);
 
         this.ministream = ministream;
-        if(!"default".equals(ministream.getId()))
+        if (!"default".equals(ministream.getId())) {
             catchstream.setContributorsMap(connector.getStreamContributors(ministream.getId()));
-        else
+        } else {
             catchstream.setEmptyContributorsMap();
+        }
 
     }
-    
+
     public StreamController(catchStream catchstream, catchConnector connector) throws IOException, ParseException {
         this.connector = connector;
         this.catchstream = catchstream;
@@ -84,14 +85,14 @@ public class StreamController {
             // System.out.println(""+keyset.toArray()[0]);
             statement.executeUpdate("insert into STREAMS values(" + "'" + catchstream.getId() + "'" + ", " + catchstream.getCount() + ", " + catchstream.getContributor_count() + ", " + "'" + catchstream.getName() + "'" + ", " + "'" + catchstream.getSource() + "'" + ", " + "'" + catchstream.getCreated_at() + "'" + ", " + "'" + catchstream.getModified_at() + "'" + ", " + ministream.getServer_modified_at() + ", " + "'" + ministream.getAnnotations().get("user:color") + "'" + ", " + "'" + ministream.getAnnotations().get("color") + "'" + ", " + ministream.getServer_created_at() + ", " + catchstream.getServer_deleted_at() + ", " + "'YESrecznie'" + ", " + "'0'" + ", " + "'0'" + ")");
 
-          //  System.out.println("id obiektu " + catchstream.getObjects().size());
+            //  System.out.println("id obiektu " + catchstream.getObjects().size());
 
 
             ResultSet rs = statement.executeQuery("select * from STREAMS");
             while (rs.next()) {
                 // read the result set
-             //   System.out.println("stream_id = " + rs.getString("stream_id"));
-           //     System.out.println("name = " + rs.getInt("name"));
+                //   System.out.println("stream_id = " + rs.getString("stream_id"));
+                //     System.out.println("name = " + rs.getInt("name"));
             }
 
         } catch (SQLException e) {

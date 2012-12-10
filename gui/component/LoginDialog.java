@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -303,7 +304,11 @@ public class LoginDialog extends javax.swing.JDialog {
              synchroText.setText("Zalogowano, Proszę czekać trwa synchronizacja...");
             
              Synchronizer synchronizer = new Synchronizer();
-             synchronizer.run(connector,true);
+            try {
+                synchronizer.run(connector,true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
              doClose(RET_OK);
             
          } else {

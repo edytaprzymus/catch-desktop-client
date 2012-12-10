@@ -120,22 +120,22 @@ public final class catchStream {
         return count;
     }
 
-    public String getModifiedLocally () {
+    public String getModifiedLocally() {
         return modified_locally;
     }
-    
+
     public void setModifiedLocally(String ml) {
         this.modified_locally = ml;
     }
-    
-    public String getDeletedLocally () {
+
+    public String getDeletedLocally() {
         return deleted_locally;
     }
-    
+
     public void setDeletedLocally(String ml) {
         this.deleted_locally = ml;
     }
-    
+
     public int getContributor_count() {
         return contributor_count;
     }
@@ -215,12 +215,13 @@ public final class catchStream {
         this.server_created_at = server_created_at;
         this.server_modified_at = server_modified_at;
         this.objects = this.getObjectsFromStreamId(id);
-       
+
     }
+
     public List<miniObject> getObjectsFromStreamId(String streamId) {
-        
+
         List<miniObject> objects = new ArrayList<miniObject>();
-         String sDriverName = "org.sqlite.JDBC";
+        String sDriverName = "org.sqlite.JDBC";
         try {
             Class.forName(sDriverName);
         } catch (ClassNotFoundException e) {
@@ -236,16 +237,16 @@ public final class catchStream {
             statement.setQueryTimeout(30);
             statement2.setQueryTimeout(30);
 
-            
-               rs = statement2.executeQuery("select object_id from OBJECT_IN_STREAM where stream_id=('" + streamId +"')");
-               while (rs.next()) {
-                   rs2 = statement.executeQuery(" select  object_id, server_modified_at, type from OBJECTS where object_id =('" + rs.getString(1) +"')");
-                   while(rs2.next()) {
-                       objects.add(new miniObject(rs2.getString("object_id"), rs2.getString("server_modified_at"), rs2.getString("type") ));
-                   }
-               }
-                
-            
+
+            rs = statement2.executeQuery("select object_id from OBJECT_IN_STREAM where stream_id=('" + streamId + "')");
+            while (rs.next()) {
+                rs2 = statement.executeQuery(" select  object_id, server_modified_at, type from OBJECTS where object_id =('" + rs.getString(1) + "')");
+                while (rs2.next()) {
+                    objects.add(new miniObject(rs2.getString("object_id"), rs2.getString("server_modified_at"), rs2.getString("type")));
+                }
+            }
+
+
         } catch (SQLException e) {
             // if the error message is "out of memory", 
             // it probably means no database file is found
@@ -269,7 +270,7 @@ public final class catchStream {
         String str = "";
         while ((line = rd.readLine()) != null) {
             str += line;
-           
+
         }
         String replaceAll = str.replaceAll("\\s", "");
         JSONParser parser = new JSONParser();
@@ -278,54 +279,48 @@ public final class catchStream {
         Object result = jsonObject.get(TAG_RESULT);
         JSONObject jsonResult = (JSONObject) result;
         name = (String) jsonResult.get(TAG_NAME);
-        
-        System.out.print(name.toUpperCase() + "\n");
-        
+
+        //System.out.print(name.toUpperCase() + "\n");
+
         if (jsonResult.get(TAG_SOURCE) != null) {
             source = (String) jsonResult.get(TAG_SOURCE);
-        }
-        else{
+        } else {
             source = null;
         }
-        
+
         if (jsonResult.get(TAG_CREATED_AT) != null) {
             created_at = (String) jsonResult.get(TAG_CREATED_AT);
-        }
-        else{
+        } else {
             created_at = "0";
         }
-        
+
         id = (String) jsonResult.get(TAG_ID);
-        
-        if (jsonResult.get(TAG_MODIFIED_AT) != null){
+
+        if (jsonResult.get(TAG_MODIFIED_AT) != null) {
             modified_at = (String) jsonResult.get(TAG_MODIFIED_AT);
-        }
-        else{
+        } else {
             modified_at = "0";
         }
-        
-        if (jsonResult.get(TAG_SERVER_DELETED_AT) != null){
+
+        if (jsonResult.get(TAG_SERVER_DELETED_AT) != null) {
             server_deleted_at = (String) jsonResult.get(TAG_SERVER_DELETED_AT);
-        }
-        else{
+        } else {
             server_deleted_at = "0";
         }
-        
-        if (jsonResult.get(TAG_SERVER_MODIFIED_AT) != null){
-        server_modified_at = (String) jsonResult.get(TAG_SERVER_MODIFIED_AT);
-        }
-        else{
+
+        if (jsonResult.get(TAG_SERVER_MODIFIED_AT) != null) {
+            server_modified_at = (String) jsonResult.get(TAG_SERVER_MODIFIED_AT);
+        } else {
             server_modified_at = "0";
         }
-        
-        if (jsonResult.get(TAG_SERVER_CREATED_AT) != null){
-        server_created_at = (String) jsonResult.get(TAG_SERVER_CREATED_AT);
-        }
-        else{
+
+        if (jsonResult.get(TAG_SERVER_CREATED_AT) != null) {
+            server_created_at = (String) jsonResult.get(TAG_SERVER_CREATED_AT);
+        } else {
             server_created_at = "0";
         }
         //   if (get){
-        
+
         Object jsonAnnotations = jsonResult.get(TAG_ANNOTATIONS);
         if (jsonAnnotations != null) {
             JSONObject jsonAnnotationsObject = (JSONObject) jsonAnnotations;
@@ -337,12 +332,12 @@ public final class catchStream {
             }
 
         }
-        System.out.print(name.toUpperCase() + "\n");
+        //System.out.print(name.toUpperCase() + "\n");
         JSONArray objectsJson = (JSONArray) jsonResult.get(TAG_OBJECTS);
         for (int i = 0; i < objectsJson.size(); i++) {
             JSONObject objectJson = (JSONObject) objectsJson.get(i);
             miniObject mini = new miniObject((String) objectJson.get(TAG_ID), (String) objectJson.get(TAG_SERVER_MODIFIED_AT), (String) objectJson.get(TAG_TYPE));
-            System.out.println("dodalem obiekt mini o id" + mini.getId());
+            //System.out.println("dodalem obiekt mini o id" + mini.getId());
             objects.add(mini);
         }
         //}
@@ -358,11 +353,11 @@ public final class catchStream {
 
 
     }
-    
-    public miniStream getMiniStream(){
+
+    public miniStream getMiniStream() {
         Integer y = contributor_count;
         long x = y.longValue();
-        return new miniStream(id, server_modified_at,x,
+        return new miniStream(id, server_modified_at, x,
                 server_created_at, name, annotations);
     }
 
@@ -380,30 +375,29 @@ public final class catchStream {
         Object result = jsonObject.get(TAG_RESULT);
         JSONObject jsonResult = (JSONObject) result;
         Object contribs = jsonResult.get(TAG_CONTRIBUTORS);
-        if (contribs != null){
+        if (contribs != null) {
             JSONArray jsonContributors = (JSONArray) contribs;
             for (int i = 0; i < jsonContributors.size(); i++) {
                 JSONObject rec = (JSONObject) jsonContributors.get(i);
                 String uname = (String) rec.get("user_name");
-                System.out.println("uname " + uname + i);
+                //System.out.println("uname " + uname + i);
                 String uid = (String) rec.get("id");
                 user_idList.add(uid);
                 user_nameList.add(uname);
-                System.out.println("id usera w users todwed " + user_idList.get(i) + "a jego name todewdew " + user_nameList.get(i) + "  " + i);
+                //System.out.println("id usera w users todwed " + user_idList.get(i) + "a jego name todewdew " + user_nameList.get(i) + "  " + i);
                 Object put = contributors.put(uid, uname);
             }
-        }
-        else{
-            System.out.println("NULL");
+        } else {
+            //System.out.println("NULL");
             Object put = contributors.put("0", "0");
             user_idList.add("0");
             user_nameList.add("0");
         }
     }
-    
-    public void setEmptyContributorsMap(){
-            Object put = contributors.put("nastasja", "35203232");
-            user_idList.add("35203232");
-            user_nameList.add("nastasja");
+
+    public void setEmptyContributorsMap() {
+        Object put = contributors.put("nastasja", "35203232");
+        user_idList.add("35203232");
+        user_nameList.add("nastasja");
     }
 }

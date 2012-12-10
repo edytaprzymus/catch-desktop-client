@@ -120,7 +120,7 @@ public class catchConnector {
 
     public String getObjectUrlInSync(String objectId) {
 
-        return basicUrl + "streams/sync" + objectId;
+        return basicUrl + "streams/sync/" + objectId;
 
     }
 
@@ -318,6 +318,8 @@ public class catchConnector {
         EntityUtils.consume(entity);
         HttpResponse response = httpClient.execute(put);
         entity = response.getEntity();
+        //System.out.println(EntityUtils.getContentMimeType(entity));
+        //System.out.println(encodedLoginData);
         return response;
 
     }
@@ -346,7 +348,7 @@ public class catchConnector {
         nameValuePairs.add(new BasicNameValuePair("server_modified_at", serverModifiedAt));
         nameValuePairs.add(new BasicNameValuePair("name", name));
         if (!colorName.isEmpty()){
-            nameValuePairs.add(new BasicNameValuePair("user:color", colorName));
+            nameValuePairs.add(new BasicNameValuePair("user:color", "base_1"));
         }
         put.setEntity(new UrlEncodedFormEntity(nameValuePairs));
         EntityUtils.consume(entity);
@@ -546,20 +548,4 @@ public class catchConnector {
         }
     }
 
-    
-    public static void main(String[] args) throws ClientProtocolException, IOException, ParseException {
-       
-        catchConnector conn =  new catchConnector("nastasja", "filipovna");
-        HttpResponse resp = conn.getStream("default");
-        catchStream stream1 = new catchStream(resp);
-        System.out.println(stream1.getName());
-        
-        List<miniObject> obj = stream1.getObjects();
-        HttpResponse resp2 = conn.getObjectsInStream("default", obj.get(1).getId());
-        catchObject note = new catchObject(resp2);
-        System.out.println(note.getText());
-        
-        
-        
-    }
 }

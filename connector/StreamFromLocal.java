@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-
 /**
  *
  * @author Kamil
@@ -24,9 +23,9 @@ public class StreamFromLocal {
 
     public StreamFromLocal() {
     }
-    
+
     public catchStream createStream(String userId) {
-         String sDriverName = "org.sqlite.JDBC";
+        String sDriverName = "org.sqlite.JDBC";
         try {
             Class.forName(sDriverName);
         } catch (ClassNotFoundException e) {
@@ -39,7 +38,7 @@ public class StreamFromLocal {
             connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);
-            
+
             int randomId = random.nextInt();
             statement.executeUpdate("insert into STREAMS values(" + "'" + randomId + "'" + ", " + 0 + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + "*" + "'" + ", " + "'" + new Date() + "'" + ", " + "'" + new Date() + "'" + ", " + 0 + ", " + "'" + "*" + "'" + ", " + "'" + "*" + "'" + ", " + 0 + ", " + 0 + ", " + "'YESrecznie'" + ", " + "'NOrecznie'" + ", " + "'NOrecznie'" + ")");
             statement.executeUpdate("insert into CONTRIBUTORS values(" + "'" + userId + "'" + ", " + "'" + randomId + "'" + ")");
@@ -49,8 +48,9 @@ public class StreamFromLocal {
             ResultSet rs = statement.executeQuery("select * from STREAMS");
             while (rs.next()) {
                 // read the result set
-                System.out.println("stream_id = " + rs.getString("stream_id"));
+                //System.out.println("stream_id = " + rs.getString("stream_id"));
                 System.out.println("name = " + rs.getInt("name"));
+
             }
 
         } catch (SQLException e) {
@@ -67,10 +67,10 @@ public class StreamFromLocal {
                 System.err.println(e);
             }
         }
-        
+
         return stream;
     }
-    
+
     public void updateStreamName(String newName, catchStream stream) {
         stream.setName(newName);
         this.updateStream(stream);
@@ -127,10 +127,10 @@ public class StreamFromLocal {
             int i = 0;
             while (rs.next()) {
                 miniStream mS = new miniStream((String) rs.getString("stream_id"), (String) rs.getString("server_modified_at"), (long) rs.getLong("count"), (String) rs.getString("server_created_at"), (String) rs.getString("name"), getHashMap((String) rs.getString("user_color"), (String) rs.getString("color")));
-                mS.setDeleted_locally(rs.getString("deleted_locally"));        
-                mS.setModified_locally(rs.getString("modified_locally"));        
+                mS.setDeleted_locally(rs.getString("deleted_locally"));
+                mS.setModified_locally(rs.getString("modified_locally"));
                 ministream.add(mS);
-                
+
             }
 
         } catch (SQLException e) {
@@ -204,20 +204,19 @@ public class StreamFromLocal {
 
 
     }
-    
+
     public List<catchObject> getObjectsFromSteam(String stream_id) {
-        
+
         List<catchObject> objects = new ArrayList<catchObject>();
         catchStream catchstream = this.getStream(stream_id);
         List<miniObject> miniobjects = catchstream.getObjectsFromStreamId(stream_id);
-        System.out.println("Na tym etapie mamy z kolei " + miniobjects.size());
-        ObjectFromLocal o= new ObjectFromLocal();
-        
-        for(miniObject mini : miniobjects){
+        ObjectFromLocal o = new ObjectFromLocal();
+
+        for (miniObject mini : miniobjects) {
             objects.add(o.getObject(mini.getId()));
         }
-        
-        
+
+
         return objects;
     }
 

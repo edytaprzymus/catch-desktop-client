@@ -22,8 +22,11 @@ public class Controller {
         }
         dialog = new LoginDialog(new javax.swing.JFrame(), true, this);
         dialog.setVisible(true);  
+        
         if (dialog.getReturnStatus() == 1) {
             startMainFrame();
+        } else {
+            System.exit(0);
         }
         
     }

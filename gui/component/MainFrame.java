@@ -15,6 +15,7 @@ import connector.miniObject;
 import connector.miniStream;
 import gui.Controller;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
@@ -158,7 +159,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(synchronizeButton)
                 .addGap(18, 18, 18)
                 .addComponent(synchroInfoLabel)
-                .addContainerGap(535, Short.MAX_VALUE))
+                .addContainerGap(670, Short.MAX_VALUE))
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,7 +235,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(DisplayedStreamName, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(editStreamButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 399, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 532, Short.MAX_VALUE)
                 .addComponent(inviteButton)
                 .addContainerGap())
             .addComponent(shareNotePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -256,7 +257,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         editStreamPanel.setBackground(new java.awt.Color(255, 204, 51));
         editStreamPanel.setMaximumSize(new java.awt.Dimension(32767, 70));
-        editStreamPanel.setPreferredSize(new java.awt.Dimension(779, 70));
+        editStreamPanel.setPreferredSize(new java.awt.Dimension(700, 70));
 
         jLabel1.setText("Zmień nazwę Przestrzeni: ");
 
@@ -310,13 +311,13 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(editStreamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(newStreamNameText))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
                 .addComponent(okButton)
                 .addGap(18, 18, 18)
                 .addComponent(doneButton)
                 .addGap(83, 83, 83)
                 .addComponent(deleteStreamButton)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(195, Short.MAX_VALUE))
         );
         editStreamPanelLayout.setVerticalGroup(
             editStreamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,7 +398,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(notesOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(notesOptionsPanelLayout.createSequentialGroup()
                         .addComponent(sortNotesCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 235, Short.MAX_VALUE)
                         .addComponent(collapseAllButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(expandAllButton))
@@ -440,7 +441,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(createStreamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(sideTabbedPane))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 922, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -513,7 +514,6 @@ public class MainFrame extends javax.swing.JFrame {
        refreshNotesPanel();
     }//GEN-LAST:event_synchronizeButtonMouseClicked
 
-    private void synchronizeButtonActionPerformed(java.awt.event.ActionEvent evt) {     }
     private void collapseAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_collapseAllButtonActionPerformed
         expandCollapseAllNotes(false);
     }//GEN-LAST:event_collapseAllButtonActionPerformed
@@ -550,7 +550,7 @@ public class MainFrame extends javax.swing.JFrame {
             cS.setModifiedLocally(time.toString());
             cS.setName(newStreamNameText.getText());
             sfl.updateStream(cS);
-            currentStreamId = "*";
+            currentStreamId = "default";
             refreshNotesPanel();
             refreshAllStreamsPanel();
             
@@ -578,8 +578,17 @@ public class MainFrame extends javax.swing.JFrame {
               allStreamsPanel.add(streamLink);
               streamLinks.add(streamLink);
            }
-           
        }       
+    }
+    
+    public void markStreamLink(String id) {
+        for (StreamLinkPanel streamLink : streamLinks) {
+            if (id.equals(streamLink.getId())) {
+                streamLink.setSelected(true);
+            } else {
+                streamLink.setSelected(false);
+            }
+        }
     }
   
     private void createAddStreamPanel() {
@@ -594,7 +603,7 @@ public class MainFrame extends javax.swing.JFrame {
        createAllStreamsPanel();
        allStreamsPanel.validate();
        allStreamsPanel.update(allStreamsPanel.getGraphics());
-       currentStreamId = "*";
+       currentStreamId = "default";
     }
     
     
@@ -647,7 +656,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         for (catchObject catchObj : allNotesFromCurrentId){
-             NotePanel notePanel = new NotePanel(catchObj, this);
+             NotePanel notePanel = new NotePanel(catchObj, this, mainPanel);
+             notePanel.setPreferredSize(new Dimension(600, notePanel.calculateMinimumHeight()));
              mainPanel.add(notePanel);
         }
     }
@@ -668,7 +678,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void addNewNote() {
         catchObject newNote = objectFromLocal.createObject(currentStreamId, "note");
-        NotePanel newNotePanel = new NotePanel(newNote, this);
+       // NotePanel newNotePanel = new NotePanel(newNote, this);
         refreshNotesPanel();
         //mainPanel.add(newNotePanel);
         mainPanel.validate();
@@ -702,6 +712,20 @@ public class MainFrame extends javax.swing.JFrame {
     
     public Controller getController() {
         return controller;
+    }
+    
+    void recalculateNotesHeight() {
+        for (Component note : mainPanel.getComponents()) {
+            if (note instanceof NotePanel) {
+                note.setPreferredSize(new Dimension(700, ((NotePanel)note).calculateMinimumHeight()));
+                pack();
+                mainPanel.revalidate();
+            }
+        }
+    }
+    
+    String getCurrentStreamId() {
+        return currentStreamId;
     }
     /**
      * @param args the command line arguments

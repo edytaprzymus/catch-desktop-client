@@ -23,6 +23,8 @@ import gui.Controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -89,6 +91,8 @@ public class LoginDialog extends javax.swing.JDialog {
         jPasswordLabel = new javax.swing.JLabel();
         jLoginInfoLabel = new javax.swing.JLabel();
         wrongLoginPasswdLabel = new javax.swing.JLabel();
+        synchroText = new javax.swing.JTextField();
+        synchroPanel = new javax.swing.JPanel();
         synchroInfoLabel = new javax.swing.JLabel();
 
         setTitle("Log in to ");
@@ -168,8 +172,35 @@ public class LoginDialog extends javax.swing.JDialog {
         wrongLoginPasswdLabel.setToolTipText("");
         wrongLoginPasswdLabel.setVisible(false);
 
+        synchroText.setEditable(false);
+        synchroText.setToolTipText("");
+        synchroText.setBorder(null);
+        synchroText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                synchroTextActionPerformed(evt);
+            }
+        });
+
+        synchroInfoLabel.setForeground(new java.awt.Color(51, 51, 255));
         synchroInfoLabel.setText("synchroLabel");
         synchroInfoLabel.setVisible(false);
+
+        javax.swing.GroupLayout synchroPanelLayout = new javax.swing.GroupLayout(synchroPanel);
+        synchroPanel.setLayout(synchroPanelLayout);
+        synchroPanelLayout.setHorizontalGroup(
+            synchroPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(synchroPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(synchroInfoLabel)
+                .addContainerGap())
+        );
+        synchroPanelLayout.setVerticalGroup(
+            synchroPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(synchroPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(synchroInfoLabel)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -192,9 +223,14 @@ public class LoginDialog extends javax.swing.JDialog {
                         .addGap(55, 55, 55)
                         .addComponent(jLoginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(synchroInfoLabel)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(111, 111, 111)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(synchroPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(synchroText, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(151, 151, 151)))
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, okButton});
@@ -208,9 +244,11 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addComponent(jLoginInfoLabel)
                 .addGap(18, 18, 18)
                 .addComponent(jLoginPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                .addComponent(synchroInfoLabel)
-                .addGap(54, 54, 54)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(synchroPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(synchroText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton))
@@ -223,8 +261,11 @@ public class LoginDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+         okButton.setEnabled(false);
          synchroInfoLabel.setText("Proszę czekać. Trwa logowanie...");
          
+         synchroText.setText("Proszę czekać. Trwa logowanie...");
+         synchroText.setVisible(true);
          synchroInfoLabel.setVisible(true);
          String userNameString = userName.getText();
          String userPasswdString = userPassword.getText();
@@ -244,6 +285,8 @@ public class LoginDialog extends javax.swing.JDialog {
          } catch (UnknownHostException e) {
             System.err.println("Brak polaczenia");
             synchroInfoLabel.setText("Brak połączenia z internetem. Praca lokalna");
+            synchroPanel.repaint();
+            synchroText.setText("Brak połączenia z internetem. Praca lokalna");
             if(!Database.checkUser(connector.getEncodedLoginData())) {  //przy braku polaczenia sprawdzam czy loguje sie uzytkownik bedacy wlascicielem bazy
                 doClose(RET_OK);
                 return;
@@ -256,16 +299,19 @@ public class LoginDialog extends javax.swing.JDialog {
          //jezeli jest polaczenie to sie loguje i synchronizuje baze z serwerem
          if (response != null && status) {
              synchroInfoLabel.setText("Zalogowano, Proszę czekać trwa synchronizacja...");
+             synchroPanel.repaint();
+             synchroText.setText("Zalogowano, Proszę czekać trwa synchronizacja...");
             
-             
              Synchronizer synchronizer = new Synchronizer();
              synchronizer.run(connector,true);
              doClose(RET_OK);
             
          } else {
+             okButton.setEnabled(true);
              wrongLoginPasswdLabel.setVisible(true);
              synchroInfoLabel.setVisible(false);
-            
+             synchroText.setVisible(false);
+
          }
          
        
@@ -289,6 +335,10 @@ public class LoginDialog extends javax.swing.JDialog {
     private void userPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_userPasswordActionPerformed
+
+    private void synchroTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_synchroTextActionPerformed
+        
+    }//GEN-LAST:event_synchroTextActionPerformed
     
     private void doClose(int retStatus) {
         returnStatus = retStatus;
@@ -323,6 +373,8 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jPasswordLabel;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel synchroInfoLabel;
+    private javax.swing.JPanel synchroPanel;
+    private javax.swing.JTextField synchroText;
     private javax.swing.JTextField userName;
     private javax.swing.JPasswordField userPassword;
     private javax.swing.JLabel wrongLoginPasswdLabel;

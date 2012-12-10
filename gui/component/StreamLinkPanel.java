@@ -5,6 +5,7 @@
 package gui.component;
 
 import connector.miniStream;
+import java.awt.Color;
 
 /**
  *
@@ -38,11 +39,23 @@ public class StreamLinkPanel extends javax.swing.JPanel {
 
         streamNameLabel = new javax.swing.JLabel();
 
+        setBackground(Color.gray);
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setMaximumSize(new java.awt.Dimension(2147483647, 40));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
+        });
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
             }
         });
 
@@ -67,11 +80,40 @@ public class StreamLinkPanel extends javax.swing.JPanel {
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         parent.setCurrentStreamId(this.getStream().getId());
+        parent.markStreamLink(this.getStream().getId());
     }//GEN-LAST:event_formMouseClicked
 
+    private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
+        this.setBackground(Color.white);
+    }//GEN-LAST:event_formMouseEntered
+
+    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+        if (!selected) {
+            this.setBackground(Color.gray);
+        }
+    }//GEN-LAST:event_formMouseExited
+
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        
+    }//GEN-LAST:event_formMouseMoved
+
+    public String getId () {
+        return stream.getId();
+    } 
+    
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+        
+        if (selected) {
+            this.setBackground(Color.white);
+        } else {
+            this.setBackground(Color.gray);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel streamNameLabel;
     // End of variables declaration//GEN-END:variables
     private miniStream stream;
     private MainFrame parent;
+    private boolean selected = false;
 }

@@ -120,6 +120,16 @@ public class NotesBottomPanel extends javax.swing.JPanel {
     
     private void saveButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_organizeButtonMouseClicked
        objectFromLocal.updateObjectText(notePanel.getNoteText(), note);
+       for (TaskPanel taskPanel: notePanel.getTaskPanels()) {
+           objectFromLocal.updateObjectText(taskPanel.getTaskText(), taskPanel.getTask());
+       }
+       
+       for (CommentsPanel commentPanel : notePanel.getCommentPanels()) {
+           String commentText = commentPanel.getCommentText();
+           String commentTextbefore = commentPanel.getComment().getText();
+           objectFromLocal.updateObjectText(commentPanel.getCommentText(), commentPanel.getComment());
+       }
+       
        notePanel.refreshHeader();
     }
 

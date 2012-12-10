@@ -7,8 +7,10 @@ package gui.component;
 import connector.catchObject;
 import connector.miniObject;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JPanel;
 
 /**
  *
@@ -19,7 +21,8 @@ public class NotePanel extends javax.swing.JPanel {
     /**
      * Creates new form NotePanel
      */
-    public NotePanel(catchObject object, MainFrame parent) {
+    public NotePanel(catchObject object, MainFrame parent, JPanel mainPanel) {
+        this.mainPanel = mainPanel;
         this.note = object;
         this.parent = parent;
         initComponents();
@@ -48,7 +51,8 @@ public class NotePanel extends javax.swing.JPanel {
         checkedTasksCheckBox = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
-        setMaximumSize(new java.awt.Dimension(32767, 200));
+        setMaximumSize(new java.awt.Dimension(32767, 1000));
+        setMinimumSize(new java.awt.Dimension(23, 200));
         setPreferredSize(new java.awt.Dimension(700, 125));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -97,7 +101,9 @@ public class NotePanel extends javax.swing.JPanel {
 
         noteText.setColumns(20);
         noteText.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        noteText.setLineWrap(true);
         noteText.setRows(5);
+        noteText.setMinimumSize(new java.awt.Dimension(4, 60));
         notePane.setViewportView(noteText);
 
         add(notePane);
@@ -153,13 +159,16 @@ public class NotePanel extends javax.swing.JPanel {
 
     private void createTasksPanel() {
         taskPanels.clear();
-        for (catchObject task: parent.getTasksFromNote(note.getId())) {
+        List<catchObject> tasks = parent.getTasksFromNote(note.getId());
+        for (catchObject task: tasks) {
             TaskPanel taskPanel = new TaskPanel(task);
             add(taskPanel);
             taskPanel.setVisible(false); 
             taskPanels.add(taskPanel);
         }
-        
+        if (tasks.size() == 0) {
+            tasksHeaderPanel.setVisible(false);
+        }
     }
     
     private void createCommentsPanel() {
@@ -168,7 +177,7 @@ public class NotePanel extends javax.swing.JPanel {
             CommentsPanel commentPanel = new CommentsPanel(comment);
             add(commentPanel);
             commentPanel.setVisible(false); 
-            commentPanels.clear();
+            commentPanels.add(commentPanel);
         }
     }
     
@@ -178,8 +187,21 @@ public class NotePanel extends javax.swing.JPanel {
         notesBottomPanel.setVisible(false);
 
     }
-    
+    public int calculateMinimumHeight() {
+        int minY = 125;
+        if (expanded == true) {
+            if(taskPanels.size() > 0) {
+                minY+=taskPanels.size()*taskPanels.get(0).getPreferredSize().height;
+            }
+            if(commentPanels.size() > 0) {
+                minY+=commentPanels.size()*commentPanels.get(0).getPreferredSize().height;
+            }
+            minY+=notesBottomPanel.getPreferredSize().height;   
+        }
+        return minY;
+    }
     public void expandCollapse(boolean expandCollapse){
+        
         tasksHeaderPanel.setVisible(expandCollapse);
         for (TaskPanel taskPanel : taskPanels) {
             taskPanel.setVisible(expandCollapse);
@@ -188,9 +210,11 @@ public class NotePanel extends javax.swing.JPanel {
             commentsPanel.setVisible(expandCollapse);
         }
         notesBottomPanel.setVisible(expandCollapse);
+        expanded = expandCollapse;
+        parent.recalculateNotesHeight();
         this.update(getGraphics());
         parent.pack();
-        expanded = expandCollapse;
+        mainPanel.revalidate(); 
     }
     
     public void refreshHeader() {
@@ -222,6 +246,14 @@ public class NotePanel extends javax.swing.JPanel {
         return noteText.getText();
     }
     
+    public List<TaskPanel> getTaskPanels(){
+        return taskPanels;
+    }
+    
+    public List<CommentsPanel> getCommentPanels() {
+        return commentPanels;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField checkedTasksCheckBox;
     private javax.swing.JTextField dateText;
@@ -236,9 +268,8 @@ public class NotePanel extends javax.swing.JPanel {
     //CommentsPanel commentsPanel;
     List <TaskPanel> taskPanels = new LinkedList<>();
     List <CommentsPanel> commentPanels = new LinkedList<>();
-
-    //List <String> taskPanels;
     boolean expanded = false;
     MainFrame parent;
     catchObject note;
+    JPanel mainPanel;
 }

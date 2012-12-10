@@ -214,10 +214,12 @@ public final class catchStream {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:catch.db");
             Statement statement = connection.createStatement();
+            Statement statement2 = connection.createStatement();
             statement.setQueryTimeout(30);
+            statement2.setQueryTimeout(30);
 
             
-               rs = statement.executeQuery("select object_id from OBJECT_IN_STREAM where stream_id=('" + streamId +"')");
+               rs = statement2.executeQuery("select object_id from OBJECT_IN_STREAM where stream_id=('" + streamId +"')");
                while (rs.next()) {
                    rs2 = statement.executeQuery(" select  object_id, server_modified_at, type from OBJECTS where object_id =('" + rs.getString(1) +"')");
                    while(rs2.next()) {

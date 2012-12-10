@@ -10,10 +10,12 @@ import connector.ObjectFromLocal;
 import connector.StreamFromLocal;
 import connector.catchConnector;
 import connector.catchObject;
+import connector.catchStream;
 import connector.miniObject;
 import connector.miniStream;
 import gui.Controller;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,6 +63,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         synchronizeButton = new javax.swing.JButton();
         synchroInfoLabel = new javax.swing.JLabel();
+        userLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         mainPanel = new javax.swing.JPanel();
         mainHeaderPanel = new javax.swing.JPanel();
@@ -121,7 +124,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         headerPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel2.setText("zalogowany jako: ");
+        jLabel2.setText("Zalogowany jako: ");
 
         synchronizeButton.setBackground(new java.awt.Color(0, 51, 255));
         synchronizeButton.setText("synchronizacja");
@@ -130,9 +133,17 @@ public class MainFrame extends javax.swing.JFrame {
                 synchronizeButtonMouseClicked(evt);
             }
         });
+        synchronizeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                synchronizeButtonActionPerformed(evt);
+            }
+        });
 
         synchroInfoLabel.setText("Trwa synchronizacja...");
         synchroInfoLabel.setToolTipText("");
+
+        userLabel.setText("User_id");
+        userLabel.setText(Database.getUser().getLogin());
 
         javax.swing.GroupLayout headerPanelLayout = new javax.swing.GroupLayout(headerPanel);
         headerPanel.setLayout(headerPanelLayout);
@@ -141,11 +152,13 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(headerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(210, 210, 210)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(userLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(synchronizeButton)
                 .addGap(18, 18, 18)
                 .addComponent(synchroInfoLabel)
-                .addContainerGap(536, Short.MAX_VALUE))
+                .addContainerGap(535, Short.MAX_VALUE))
         );
         headerPanelLayout.setVerticalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +167,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(synchronizeButton)
-                    .addComponent(synchroInfoLabel))
+                    .addComponent(synchroInfoLabel)
+                    .addComponent(userLabel))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
@@ -253,14 +267,39 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         okButton.setBackground(getBackground());
-        okButton.setText("OK");
+        okButton.setText("Zatwierdź zmiany");
+        okButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                okEditStreamClick(evt);
+            }
+        });
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
         doneButton.setBackground(getBackground());
-        doneButton.setText("Gotowe");
+        doneButton.setText("Anuluj");
         doneButton.setToolTipText("");
+        doneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                doneButtonActionPerformed(evt);
+            }
+        });
 
         deleteStreamButton.setBackground(new java.awt.Color(255, 51, 51));
         deleteStreamButton.setText("Usuń Przestrzeń");
+        deleteStreamButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteStreamClick(evt);
+            }
+        });
+        deleteStreamButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteStreamButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout editStreamPanelLayout = new javax.swing.GroupLayout(editStreamPanel);
         editStreamPanel.setLayout(editStreamPanelLayout);
@@ -271,13 +310,13 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(editStreamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(newStreamNameText))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
                 .addComponent(okButton)
                 .addGap(18, 18, 18)
                 .addComponent(doneButton)
                 .addGap(83, 83, 83)
                 .addComponent(deleteStreamButton)
-                .addContainerGap(160, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
         editStreamPanelLayout.setVerticalGroup(
             editStreamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -478,6 +517,51 @@ public class MainFrame extends javax.swing.JFrame {
         expandCollapseAllNotes(false);
     }//GEN-LAST:event_collapseAllButtonActionPerformed
 
+    private void deleteStreamClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteStreamClick
+        StreamFromLocal sfl = new StreamFromLocal();
+        catchStream cS = sfl.getStream(currentStreamId);
+        Long time = ((new Date()).getTime());
+        cS.setDeletedLocally(time.toString());
+        sfl.updateStream(cS);
+        currentStreamId = "*";
+        refreshNotesPanel();
+        refreshAllStreamsPanel();
+        editStreamPanel.setVisible(!editStreamPanel.isVisible());
+    }//GEN-LAST:event_deleteStreamClick
+
+    private void deleteStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStreamButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteStreamButtonActionPerformed
+
+    private void synchronizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_synchronizeButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_synchronizeButtonActionPerformed
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void okEditStreamClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okEditStreamClick
+        if(!newStreamNameText.getText().equals("")) {
+            StreamFromLocal sfl = new StreamFromLocal();
+            catchStream cS = sfl.getStream(currentStreamId);
+            Long time = ((new Date()).getTime());
+            cS.setModifiedLocally(time.toString());
+            cS.setName(newStreamNameText.getText());
+            sfl.updateStream(cS);
+            currentStreamId = "*";
+            refreshNotesPanel();
+            refreshAllStreamsPanel();
+            
+        }
+            editStreamPanel.setVisible(!editStreamPanel.isVisible());
+    }//GEN-LAST:event_okEditStreamClick
+
+    private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonActionPerformed
+        editStreamPanel.setVisible(!editStreamPanel.isVisible());
+        newStreamNameText.setText("");
+    }//GEN-LAST:event_doneButtonActionPerformed
+
     private void createNotePanels() {
       // NotePanel np = new NotePanel(this);
      //  np.setVisible(true);
@@ -488,9 +572,11 @@ public class MainFrame extends javax.swing.JFrame {
     private void createAllStreamsPanel() {
        List<miniStream> allStreams = streamFromLocal.getStreams();
        for (miniStream mini : allStreams) {
-           final StreamLinkPanel streamLink = new StreamLinkPanel(mini, this);
-           allStreamsPanel.add(streamLink);
-           streamLinks.add(streamLink);
+           if(mini.getDeleted_locally().equals("0")) {
+              final StreamLinkPanel streamLink = new StreamLinkPanel(mini, this);
+              allStreamsPanel.add(streamLink);
+              streamLinks.add(streamLink);
+           }
            
        }       
     }
@@ -670,6 +756,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel sortNotesLabel;
     private javax.swing.JLabel synchroInfoLabel;
     private javax.swing.JButton synchronizeButton;
+    private javax.swing.JLabel userLabel;
     // End of variables declaration//GEN-END:variables
     private LinkedList<NotePanel> notePanels;
     private LinkedList<String> streamList = new LinkedList<>();

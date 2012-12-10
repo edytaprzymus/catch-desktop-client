@@ -163,8 +163,8 @@ public class StreamFromLocal {
     public void updateStream(catchStream stream) {
 
         String isUptoDate = "yesisuptodate";
-        String deletedLocaly = "nonotdeletedlocally";
-        String modifiedLocally = "yesmodifiedlocally";
+        String deletedLocaly = stream.getDeletedLocally();
+        String modifiedLocally = stream.getModifiedLocally();
 
 
 
@@ -240,6 +240,8 @@ public class StreamFromLocal {
             int i = 0;
             while (rs.next()) {
                 catchStream catchstream = new catchStream((int) rs.getInt("count"), (int) rs.getInt("contributor_count"), (String) rs.getString("name"), (String) rs.getString("source"), (String) rs.getString("created_at"), (String) rs.getString("modified_at"), (String) rs.getString("server_deleted_at"), (String) rs.getString("stream_id"), (String) rs.getString("server_created_at"), (String) rs.getString("server_modified_at"));
+                catchstream.setModifiedLocally(rs.getString("modified_locally"));
+                catchstream.setDeletedLocally(rs.getString("deleted_locally"));
                 catchstream1 = catchstream;
             }
 

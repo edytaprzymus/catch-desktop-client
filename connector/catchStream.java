@@ -93,6 +93,8 @@ public final class catchStream {
     private String id;
     private String server_created_at;
     private String server_modified_at;
+    private String modified_locally;
+    private String deleted_locally;
     private HashMap contributors = new HashMap();
     private List<String> user_idList = new ArrayList<>();
     private List<String> user_nameList = new ArrayList<>();
@@ -118,6 +120,22 @@ public final class catchStream {
         return count;
     }
 
+    public String getModifiedLocally () {
+        return modified_locally;
+    }
+    
+    public void setModifiedLocally(String ml) {
+        this.modified_locally = ml;
+    }
+    
+    public String getDeletedLocally () {
+        return deleted_locally;
+    }
+    
+    public void setDeletedLocally(String ml) {
+        this.deleted_locally = ml;
+    }
+    
     public int getContributor_count() {
         return contributor_count;
     }
